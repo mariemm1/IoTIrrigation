@@ -1,0 +1,42 @@
+<header class="header">
+  <div class="brand">
+    <div class="brand-dot">{{ (orgName || 'O')[0] }}</div>
+    <div class="brand-text">
+      <strong>{{ orgName || 'Organization' }}</strong>
+      <span class="muted"> Dashboard</span>
+    </div>
+  </div>
+
+  <div class="right-actions" (click)="$event.stopPropagation()">
+    <button class="btn primary" type="button" (click)="refresh.emit()" title="Refresh">
+      Refresh
+    </button>
+
+    <div class="hello">Hello, <strong>{{ userName }}</strong></div>
+    <div class="avatar"
+         (click)="toggleMenu.emit()"
+         role="button"
+         aria-haspopup="menu"
+         [attr.aria-expanded]="menuOpen">
+      {{ (userName || 'U')[0] }}
+    </div>
+
+    <div class="menu" *ngIf="menuOpen" role="menu">
+      <!-- RENAMED: Update profile -> Profile (with user icon) -->
+      <button class="menu-item" role="menuitem" (click)="goProfile.emit()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"></path>
+        </svg>
+        Profile
+      </button>
+
+      <button class="menu-item danger" role="menuitem" (click)="logout.emit()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M10 17l1.41-1.41L8.83 13H21v-2H8.83l2.58-2.59L10 7l-5 5 5 5z"></path>
+          <path d="M3 19h8v-2H5V7h6V5H3v14z" opacity=".45"></path>
+        </svg>
+        Logout
+      </button>
+    </div>
+  </div>
+</header>

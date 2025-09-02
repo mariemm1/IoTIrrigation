@@ -1,0 +1,9 @@
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: rgba(0,31,63,0.85);
+  z-index: 10; font-family: 'Segoe UI', sans-serif;
+}
+.top-nav ul { display: flex; justify-content: center; margin:0; padding:0.6rem 0; list-style: none; }
+.top-nav li { margin: 0 1rem; }
+.top-nav a { color: #fff; text-decoration: none; font-weight:600; transition: color .2s; }
+.top-nav a:hover { color: #00bfff; }

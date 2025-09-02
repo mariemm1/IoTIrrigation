@@ -1,0 +1,37 @@
+<div class="drawer" [class.open]="open" (click)="close()">
+  <div class="sheet" (click)="$event.stopPropagation()">
+    <div class="head"><b>Edit Organization</b><button class="x" (click)="close()">✕</button></div>
+
+    <div class="body">
+      <div *ngIf="banner as b" class="banner" [class.error]="b.kind==='error'" [class.success]="b.kind==='success'">{{ b.message }}</div>
+
+      <form class="grid" (ngSubmit)="submit()">
+        <label class="stack"><span>Name <b class="req">*</b></span>
+          <input [(ngModel)]="name" name="name" required [disabled]="busy">
+          <small class="hint" *ngIf="!name.trim()">Required.</small>
+        </label>
+
+        <label class="stack"><span>Address</span>
+          <input [(ngModel)]="address" name="address" [disabled]="busy">
+        </label>
+
+        <label class="stack"><span>Contact Email</span>
+          <input type="email" [(ngModel)]="contactEmail" name="email" [disabled]="busy">
+        </label>
+
+        <label class="stack"><span>Contact Phone</span>
+          <input [(ngModel)]="contactPhone" name="phone" [disabled]="busy">
+        </label>
+
+        <label class="stack"><span>Description</span>
+          <textarea rows="3" [(ngModel)]="description" name="description" [disabled]="busy"></textarea>
+        </label>
+
+        <div class="actions">
+          <button class="btn" type="button" (click)="close()" [disabled]="busy">Cancel</button>
+          <button class="btn primary" type="submit" [disabled]="!valid || busy">{{busy?'Saving…':'Save'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

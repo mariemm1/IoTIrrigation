@@ -1,0 +1,37 @@
+<div class="drawer" [class.open]="open" (click)="doClose()">
+  <div class="drawer-sheet" (click)="$event.stopPropagation()">
+    <div class="drawer-head">
+      <div class="h-title">Add Device</div>
+      <button class="x" (click)="doClose()">✕</button>
+    </div>
+
+    <section class="drawer-section">
+      <!-- status banners from parent -->
+      <div *ngIf="status as s" class="banner" [class.error]="s.kind==='error'" [class.success]="s.kind==='success'">
+        {{ s.message }}
+      </div>
+
+      <form class="form-grid" (ngSubmit)="submit()">
+        <label class="stack">
+          <span>DevEUI <b class="req">*</b></span>
+          <input
+            type="text"
+            placeholder="e.g. A1B2C3D4E5F6A7B8"
+            [(ngModel)]="devEui"
+            name="devEui"
+            [disabled]="busy"
+            [class.invalid]="touched && devEui.trim().length === 0"
+          />
+          <small class="hint" *ngIf="touched && devEui.trim().length === 0">DevEUI is required.</small>
+        </label>
+
+        <div class="actions">
+          <button type="button" class="btn" (click)="doClose()" [disabled]="busy">Cancel</button>
+          <button type="submit" class="btn primary" [disabled]="!isValid || busy">
+            {{ busy ? 'Adding…' : 'Add Device' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

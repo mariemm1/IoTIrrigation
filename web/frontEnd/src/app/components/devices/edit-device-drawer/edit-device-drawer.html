@@ -1,0 +1,48 @@
+<div class="drawer" [class.open]="open" (click)="doClose()">
+  <div class="drawer-sheet" (click)="$event.stopPropagation()">
+    <div class="drawer-head">
+      <div class="h-title">
+        Edit Device
+        <small *ngIf="device">{{ device.name || device.devEui }}</small>
+      </div>
+      <button class="x" (click)="doClose()">✕</button>
+    </div>
+
+    <section class="drawer-section">
+      <!-- Status banner -->
+      <div *ngIf="status as s" class="banner" [class.error]="s.kind==='error'" [class.success]="s.kind==='success'">
+        {{ s.message }}
+      </div>
+
+      <form class="form-grid" (ngSubmit)="submit()">
+        <!-- DevEUI (read-only) -->
+        <label class="stack">
+          <span>DevEUI</span>
+          <input type="text" [value]="devEui" name="devEui" disabled />
+          <small class="hint">DevEUI cannot be edited.</small>
+        </label>
+
+
+
+        <!-- Editable fields -->
+        <label class="stack">
+          <span>Name</span>
+          <input type="text" [(ngModel)]="name" name="name" placeholder="Friendly name" [disabled]="busy" />
+        </label>
+
+        <label class="stack">
+          <span>Description</span>
+          <textarea [(ngModel)]="description" name="description" rows="3" placeholder="Short notes..." [disabled]="busy"></textarea>
+        </label>
+
+
+        <div class="actions">
+          <button type="button" class="btn" (click)="doClose()" [disabled]="busy">Cancel</button>
+          <button type="submit" class="btn primary" [disabled]="!isValid || busy">
+            {{ busy ? 'Saving…' : 'Save Changes' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

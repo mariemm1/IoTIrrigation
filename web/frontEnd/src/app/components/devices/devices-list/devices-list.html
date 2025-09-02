@@ -1,0 +1,22 @@
+<ul class="device-list">
+  <li *ngFor="let d of devices; trackBy: trackByDevEui">
+    <a href="" class="device-link" (click)="$event.preventDefault(); openMap.emit(d)">
+      <div class="dev-main">
+        <div class="dev-name">{{ d.name || d.devEui }}</div>
+        <div class="dev-eui">{{ d.devEui }}</div>
+      </div>
+      <div class="dev-actions" (click)="$event.stopPropagation()">
+        <button class="ico-btn" title="Edit" (click)="edit.emit(d)">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="ico-btn danger" title="Delete" (click)="delete.emit(d)">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M6 7h12l-1 13a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 7zm3-4h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1zM4 6h16v2H4V6z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </a>
+  </li>
+</ul>

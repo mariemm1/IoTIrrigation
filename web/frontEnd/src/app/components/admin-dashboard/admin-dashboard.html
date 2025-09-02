@@ -1,0 +1,182 @@
+<div class="overlay" *ngIf="loading"><mat-spinner diameter="56"></mat-spinner></div>
+
+<div class="layout">
+
+
+
+  <!-- SIDEBAR (admin nav kept as-is) -->
+  <app-admin-nav
+    class="sidebar"
+    [organizations]="organizations"
+    [orgDevices]="orgDevices"
+    [selectedOrgId]="selectedOrgId"
+    [selectedDevEuiAdmin]="selectedDevEui"
+
+    (selectOrganization)="onSelectOrg($event)"
+    (addOrganization)="openAddOrg()"
+    (listOrganizations)="goListOrgs()"
+
+    (addUserAdmin)="addUserAdmin()"
+    (addUserClient)="addUserClient()"
+    (listUsers)="goListUsers()"
+
+    (addDeviceGlobal)="addDeviceGlobal()"
+    (addDeviceForOrg)="addDeviceForOrg($event)"
+    (listDevices)="goListDevices()"
+    (selectDeviceAdmin)="selectDeviceAdmin($event)"
+    (editDeviceAdmin)="editDeviceAdmin($event)"
+    (deleteDeviceAdmin)="deleteDeviceAdmin($event)">
+  </app-admin-nav>
+
+  <!-- MAIN -->
+  <section class="main">
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <app-header
+      [orgName]="headerOrgName"
+      [userName]="userName"
+      [menuOpen]="menuOpen"
+      (searchChange)="onSearchChange($event)"
+      (refresh)="refresh()"
+      (toggleMenu)="toggleMenu()"
+      (goProfile)="goProfile()"
+      (logout)="logout()">
+    </app-header>
+
+    <!-- Scope selector -->
+    <div class="scope-row">
+      <label>Choose organization
+        <select [(ngModel)]="selectedOrgId" (ngModelChange)="onOrgChange()">
+          <option *ngFor="let o of organizations" [value]="o.id">{{ o.name }}</option>
+        </select>
+      </label>
+
+      <div class="spacer"></div>
+
+      <label>Device
+        <select [(ngModel)]="selectedDevEui" [disabled]="!devicesInSelectedOrg.length">
+          <option *ngIf="!devicesInSelectedOrg.length" disabled selected>No devices</option>
+          <option *ngFor="let d of devicesInSelectedOrg" [value]="d.devEui">
+            {{ d.name || d.devEui }}
+          </option>
+        </select>
+      </label>
+
+      <label>Metric
+        <select [(ngModel)]="metric24">
+          <option value="soilHumidity">Soil Humidity</option>
+          <option value="luminosity">Luminosity</option>
+          <option value="humidity">Humidity</option>
+          <option value="barometer">Barometer</option>
+          <option value="temperature">Temperature</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- KPIs -->
+    <div class="summary">
+      <div class="kpi"><div class="kpi-title">Total Devices</div><div class="kpi-value">{{ total }}</div></div>
+      <div class="kpi"><div class="kpi-title">Online</div><div class="kpi-value online">{{ online }}</div></div>
+      <div class="kpi"><div class="kpi-title">Offline</div><div class="kpi-value offline">{{ offline }}</div></div>
+    </div>
+
+    <!-- Selected device card OR empty state -->
+    <div class="cards" *ngIf="selectedDevice as sel; else noDeviceCard">
+      <app-device-card
+        [device]="sel"
+        [canCommand]="true"
+        [busy]="false"
+        (openChart)="openChart(sel, $event)"
+        (openIrrigation)="openIrrigationFor(sel)">
+        (command)="onIrrigationCommand(sel, $event)"
+      </app-device-card>
+    </div>
+
+    <ng-template #noDeviceCard>
+      <div class="empty-main">
+        No devices yet in <b>{{ orgNameById(selectedOrgId) || 'this organization' }}</b>.
+      </div>
+    </ng-template>
+
+    <!-- Insights (selected org only) -->
+    <app-insights-panel class="insights"
+                        [devices]="devicesInSelectedOrg"
+                        [(selectedDevEui)]="selectedDevEui"
+                        [(metric24)]="metric24"
+                        [orgLat]="selectedOrgLat"
+                        [orgLng]="selectedOrgLng"
+                        (openMap)="openGlobalMap($event)">
+    </app-insights-panel>
+  </section>
+</div>
+
+<!-- RIGHT PANELS -->
+<div class="right-panel" [class.open]="panel==='orgs'">
+  <div class="panel-head"><b>Organizations</b><button class="x" (click)="panel=null">✕</button></div>
+  <app-org-list></app-org-list>
+</div>
+
+<div class="right-panel" [class.open]="panel==='users'">
+  <div class="panel-head"><b>Users</b><button class="x" (click)="panel=null">✕</button></div>
+  <app-user-list></app-user-list>
+</div>
+
+<div class="right-panel" [class.open]="panel==='devices'">
+  <div class="panel-head"><b>Devices</b><button class="x" (click)="panel=null">✕</button></div>
+  <app-devices-list
+    [devices]="devicesInSelectedOrg"
+    (openMap)="openGlobalMap($event)"
+    (edit)="editDeviceAdmin($event)"
+    (delete)="deleteDeviceAdmin($event)">
+  </app-devices-list>
+</div>
+
+<!-- Drawers -->
+<app-range-explorer-drawer
+  [open]="chartOpen"
+  [device]="chartDevice"
+  [metric]="chartMetric"
+  (closed)="closeChart()">
+</app-range-explorer-drawer>
+
+<app-map-drawer
+  [open]="mapOpen"
+  [devices]="devicesInSelectedOrg"
+  [focus]="mapFocus"
+  [orgLat]="selectedOrgLat"
+  [orgLng]="selectedOrgLng"
+  (closed)="mapOpen=false">
+</app-map-drawer>
+
+<!-- ✅ Irrigation history drawer -->
+<app-irrigation-drawer
+  [open]="irrigationOpen"
+  [device]="irrigationDevice"
+  (closed)="irrigationOpen=false">
+</app-irrigation-drawer>
+
+<!-- Add / Edit device drawers -->
+<app-add-device-drawer
+  [open]="addOpen"
+  [organizationId]="addOrgId || selectedOrgId || ''"
+  [userId]="userId"
+  [busy]="addBusy"
+  [status]="addStatus"
+  (closed)="addOpen=false"
+  (saved)="onDeviceCreated($event)">
+</app-add-device-drawer>
+
+<app-edit-device-drawer
+  [open]="editOpen"
+  [device]="editDevice"
+  [organizationId]="selectedOrgId || orgId"
+  [userId]="userId"
+  [busy]="editBusy"
+  [status]="editStatus"
+  (closed)="editOpen=false"
+  (saved)="onDeviceSaved($event)">
+</app-edit-device-drawer>
+
+<!-- quick add drawers (TOP-most z-index now) -->
+<app-org-add  [open]="addOrgOpen"  (closed)="addOrgOpen=false"  (created)="addOrgOpen=false; refresh()"></app-org-add>
+<app-user-add [open]="addUserOpen" [organizations]="organizations" (closed)="addUserOpen=false" (created)="addUserOpen=false; refresh()"></app-user-add>

@@ -1,0 +1,121 @@
+<!-- If organizations are provided => ADMIN view -->
+<ng-container *ngIf="isAdminMode(); else clientSidebar">
+  <aside class="sidebar">
+    <div class="side-head">
+      <div class="side-title">
+        <span>Organizations</span>
+        <span class="badge">{{ organizations.length }}</span>
+      </div>
+      <div class="head-actions">
+        <button class="btn add" (click)="addOrganization.emit()"><span class="plus">+</span> Add</button>
+        <button class="btn ghost" (click)="listOrganizations.emit()">List</button>
+      </div>
+    </div>
+
+    <ul class="org-tree">
+      <li class="org-row" *ngFor="let org of organizations; trackBy: trackOrg">
+        <div
+          class="org-card"
+          [class.selected]="selectedOrgId === org.id"
+          (click)="toggleOrg(org.id!)">
+
+          <button class="chev" [class.open]="isExpanded(org.id!)" title="Expand">▸</button>
+
+          <div class="org-meta" (click)="clickOrg(org, $event)">
+            <div class="org-name">{{ org.name || '(no name)' }}</div>
+            <div class="org-sub">
+              <span class="badge">{{ deviceCount(org) }}</span>
+              <span class="addr" *ngIf="org.address">{{ org.address }}</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="icon-btn" title="Add device" (click)="addDeviceForOrg.emit(org.id!)">＋</button>
+            <button class="icon-btn" title="Edit organization" (click)="editOrganization.emit(org)">✏️</button>
+            <button class="icon-btn danger" title="Delete organization" (click)="deleteOrganization.emit(org)">🗑️</button>
+          </div>
+        </div>
+
+        <!-- nested devices -->
+        <ul class="device-list nested" *ngIf="isExpanded(org.id!)">
+          <li class="row" *ngFor="let d of orgDevices[org.id!]; trackBy: trackDevAdmin">
+            <button
+              class="device-link"
+              [class.selected]="selectedDevEuiAdmin === d.devEui"
+              (click)="clickDevAdmin(d, $event)">
+              <div class="dev-name">{{ d.name || d.devEui }}</div>
+              <div class="dev-meta">
+                <span class="dev-eui">{{ d.devEui }}</span>
+                <span class="status" [class.live]="d.latest?.fresh" [class.stale]="!d.latest?.fresh">
+                  {{ d.latest?.fresh ? 'Live' : 'Stale' }}
+                </span>
+              </div>
+            </button>
+            <div class="actions">
+              <button class="icon-btn" title="Edit" (click)="editDeviceAdmin.emit(d)">✏️</button>
+              <button class="icon-btn danger" title="Delete" (click)="deleteDeviceAdmin.emit(d)">🗑️</button>
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="admin-quick">
+      <div class="block">
+        <div class="block-title">Users</div>
+        <div class="block-actions">
+          <button class="btn add" (click)="addUser.emit('ADMIN')">+ Admin</button>
+          <button class="btn add" (click)="addUser.emit('CLIENT')">+ Client</button>
+          <button class="btn ghost" (click)="listUsers.emit()">List</button>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Devices</div>
+        <div class="block-actions">
+          <button class="btn add" (click)="addDevice.emit()">+ Add (global)</button>
+          <button class="btn ghost" (click)="listDevices.emit()">List</button>
+        </div>
+      </div>
+
+      <div class="block">
+        <button class="btn full ghost" (click)="openMap.emit()">Open global map</button>
+      </div>
+    </div>
+  </aside>
+</ng-container>
+
+<!-- CLIENT view (original) -->
+<ng-template #clientSidebar>
+  <div class="sidebar">
+    <div class="side-head">
+      <div class="side-title">
+        <span>My Devices</span>
+        <span class="badge">{{ devices.length }}</span>
+      </div>
+      <button class="btn add" (click)="addDevice.emit()">
+        <span class="plus">+</span> Add
+      </button>
+    </div>
+
+    <ul class="device-list">
+      <li class="row" *ngFor="let d of devices; trackBy: trackByDevEui">
+        <!-- clicking the row selects the device -->
+        <button class="device-link" (click)="onRowClick(d, $event)">
+          <div class="dev-name">{{ d.name || d.devEui }}</div>
+          <div class="dev-meta">
+            <span class="dev-eui">{{ d.devEui }}</span>
+            <span class="status" [class.live]="d.latest?.fresh" [class.stale]="!d.latest?.fresh">
+              {{ d.latest?.fresh ? 'Live' : 'Stale' }}
+            </span>
+          </div>
+        </button>
+
+        <div class="actions">
+          <button class="icon-btn" title="Edit" (click)="editDevice.emit(d)">✏️</button>
+          <button class="icon-btn danger" title="Delete" (click)="deleteDevice.emit(d)">🗑️</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-template>

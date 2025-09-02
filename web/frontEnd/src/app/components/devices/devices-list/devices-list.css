@@ -1,0 +1,22 @@
+.device-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.device-link {
+    display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+    padding: 10px; border-radius: 10px; color: #eaf2fb; text-decoration: none;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    transition: background .25s, border-color .25s;
+}
+.device-link:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); }
+.dev-main { display: grid; gap: 2px; min-width: 0; }
+.dev-name { font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dev-eui  { font-size: 12px; color: #b6c6da; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dev-actions { display: flex; align-items: center; gap: 6px; }
+.ico-btn {
+    width: 28px; height: 28px; border: 1px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.06); color: #eaf2fb; border-radius: 8px;
+    display: grid; place-items: center; cursor: pointer; opacity: .9;
+    transition: transform .05s, background .2s, border-color .2s, opacity .2s;
+}
+.ico-btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.32); }
+.ico-btn:active { transform: translateY(1px); }
+.ico-btn.danger { color: #ffd4d4; border-color: rgba(255,0,0,.2); }
+.ico-btn.danger:hover { background: rgba(255,0,0,.18); }

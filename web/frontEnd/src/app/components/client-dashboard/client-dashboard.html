@@ -1,0 +1,140 @@
+<ng-container *ngIf="!loading; else spinnerTpl">
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <app-sidebar
+      class="sidebar"
+      [devices]="devices"
+      (selectDevice)="onSidebarDeviceClick($event)"
+      (addDevice)="onAddDevice()"
+      (editDevice)="onEditDevice($event)"
+      (deleteDevice)="onDeleteDevice($event)">
+    </app-sidebar>
+
+    <!-- Main -->
+    <section class="main">
+      <app-header
+        [orgName]="orgName"
+        [userName]="userName"
+        [menuOpen]="menuOpen"
+        (searchChange)="onSearchChange($event)"
+        (refresh)="refresh()"
+        (toggleMenu)="toggleMenu()"
+        (goProfile)="goProfile()"
+        (logout)="logout()">
+      </app-header>
+
+      <!-- KPIs -->
+      <div class="summary">
+        <div class="kpi">
+          <div class="kpi-title">Total Devices</div>
+          <div class="kpi-value">{{ total }}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-title">Online</div>
+          <div class="kpi-value online">{{ online }}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-title">Offline</div>
+          <div class="kpi-value offline">{{ offline }}</div>
+        </div>
+      </div>
+
+      <!-- top selection row (moved below KPIs) -->
+      <div class="top-controls">
+        <label>
+          Device:
+          <select [(ngModel)]="selectedDevEui">
+            <option *ngFor="let d of devices" [value]="d.devEui">{{ d.name || d.devEui }}</option>
+          </select>
+        </label>
+
+        <label>
+          Metric:
+          <select [(ngModel)]="metric24">
+            <option value="soilHumidity">Soil Humidity</option>
+            <option value="luminosity">Luminosity</option>
+            <option value="humidity">Humidity</option>
+            <option value="barometer">Barometer</option>
+            <option value="temperature">Temperature</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- ONE device card (selected) -->
+      <div class="cards" *ngIf="selectedDevice as sel">
+        <app-device-card
+          [device]="sel"
+          [canCommand]="false"
+          [busy]="false"
+          (openChart)="openChart(sel, $event)"
+          (openIrrigation)="openIrrigationFor(sel)">
+        </app-device-card>
+      </div>
+
+      <!-- Insights (map + time series) -->
+      <app-insights-panel
+        class="insights"
+        [devices]="devices"
+        [(selectedDevEui)]="selectedDevEui"
+        [(metric24)]="metric24"
+        [orgLat]="orgLat"
+        [orgLng]="orgLng"
+        (openMap)="openMap($event)">
+      </app-insights-panel>
+    </section>
+  </div>
+</ng-container>
+
+<!-- Range explorer drawer -->
+<app-range-explorer-drawer
+  [open]="chartOpen"
+  [device]="chartDevice"
+  [metric]="chartMetric"
+  (closed)="closeChart()">
+</app-range-explorer-drawer>
+
+<!-- Full-screen map drawer (top-level so it's on top) -->
+<app-map-drawer
+  [open]="mapOpen"
+  [devices]="devices"
+  [focus]="mapFocus"
+  [orgLat]="orgLat"
+  [orgLng]="orgLng"
+  (closed)="closeMap()">
+</app-map-drawer>
+
+<!-- Irrigation history drawer -->
+<app-irrigation-drawer
+  [open]="irrigationOpen"
+  [device]="irrigationDevice"
+  (closed)="closeIrrigation()">
+</app-irrigation-drawer>
+
+<!-- ✅ Add device drawer -->
+<app-add-device-drawer
+  [open]="addOpen"
+  [organizationId]="orgId"
+  [userId]="userId"
+  [busy]="addBusy"
+  [status]="addStatus"
+  (closed)="addOpen = false"
+  (saved)="onDeviceCreated($event)">
+</app-add-device-drawer>
+
+<!-- ✅ Edit device drawer -->
+<app-edit-device-drawer
+  [open]="editOpen"
+  [device]="editDevice"
+  [organizationId]="orgId"
+  [userId]="userId"
+  [busy]="editBusy"
+  [status]="editStatus"
+  (closed)="editOpen = false"
+  (saved)="onDeviceSaved($event)">
+</app-edit-device-drawer>
+
+<ng-template #spinnerTpl>
+  <div class="spinner"><mat-spinner diameter="56"></mat-spinner></div>
+</ng-template>

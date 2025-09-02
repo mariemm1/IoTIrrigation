@@ -1,0 +1,37 @@
+<div class="wrap">
+  <div class="head-row">
+    <h2>Organizations</h2>
+    <div class="toolbar">
+      <input class="search" placeholder="Search name, email, phone…" [(ngModel)]="q" />
+      <button class="btn" (click)="openAdd()">+ Add</button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="banner error">{{ error }}</div>
+
+  <div class="table">
+    <div class="thead">
+      <div>#</div><div>Name</div><div>Address</div><div>Contact</div><div>Description</div><div class="ta-right">Actions</div>
+    </div>
+
+    <div class="trow" *ngFor="let o of filtered; index as i; trackBy: trackById">
+      <div class="muted">{{ i+1 }}</div>
+      <div class="strong">{{ o.name }}</div>
+      <div>{{ o.address || '—' }}</div>
+      <div>
+        <div>{{ o.contactEmail || '—' }}</div>
+        <div class="muted">{{ o.contactPhone || '' }}</div>
+      </div>
+      <div class="muted">{{ o.description || '—' }}</div>
+      <div class="acts">
+        <button class="icon" title="Edit" (click)="openEdit(o)">✏️</button>
+        <button class="icon danger" title="Delete" (click)="del(o)">🗑️</button>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="!filtered.length && !loading">No organizations found.</div>
+  </div>
+
+  <app-org-add [open]="addOpen" (closed)="onAddClosed()" (created)="onAdded()"></app-org-add>
+  <app-org-edit [open]="editOpen" [org]="toEdit" (closed)="onEditClosed()" (saved)="onEdited()"></app-org-edit>
+</div>

@@ -1,0 +1,46 @@
+<div class="insights-wrap">
+  <!-- NEW tabs (replace the old Metric select) -->
+  <div class="agg-tabs">
+    <button class="tab" [class.active]="agg==='instant'" (click)="setAgg('instant')">Instant Value</button>
+    <button class="tab" [class.active]="agg==='minToday'" (click)="setAgg('minToday')">Today's low</button>
+    <button class="tab" [class.active]="agg==='maxToday'" (click)="setAgg('maxToday')">Today's high</button>
+  </div>
+
+  <div class="map-and-legend">
+    <!-- Map (SSR-safe) -->
+    <div class="map-host" [appMapReady]="onMapHostReady"></div>
+
+    <!-- Legend -->
+    <aside class="legend">
+      <div class="legend-title">Legend</div>
+      <div class="legend-sub">{{ legendTitle }}</div>
+      <ul class="legend-list">
+        <li *ngFor="let b of buckets">
+          <span class="swatch" [style.background]="b.color"></span>
+          <span class="label">{{ b.label }}</span>
+        </li>
+        <li class="no-data">
+          <span class="no-swatch"></span>
+          <span class="label">no available data</span>
+        </li>
+      </ul>
+    </aside>
+  </div>
+
+  <!-- Charts (unchanged) -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">{{ prettyMetric(metric24) }} — last 24h (30-min bins)</div>
+      <div class="chart-host">
+        <canvas #chart24El></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">{{ prettyMetric(metric24) }} — this week (Mon → Sun)</div>
+      <div class="chart-host">
+        <canvas #chart7dEl></canvas>
+      </div>
+    </div>
+  </div>
+</div>

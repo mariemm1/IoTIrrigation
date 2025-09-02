@@ -1,0 +1,37 @@
+<!-- Backdrop -->
+<div class="drawer" [class.open]="open" (click)="doClose()">
+  <!-- Sheet -->
+  <div class="drawer-sheet map-sheet" (click)="$event.stopPropagation()">
+    <div class="drawer-head">
+      <div class="h-title">
+        Device map
+        <!-- focus is guaranteed by *ngIf so no need for ?. -->
+        <small *ngIf="focus">{{ focus.name || focus.devEui }}</small>
+      </div>
+      <button class="x" (click)="doClose()">✕</button>
+    </div>
+
+    <section class="drawer-section">
+      <div class="map-body">
+        <div id="deviceMap" class="leaflet-host"></div>
+      </div>
+
+      <div class="map-info" *ngIf="focus as d">
+        <div class="info-title">{{ d.name || d.devEui }}</div>
+        <div class="info-grid">
+          <div><b>DevEUI</b> {{ d.devEui }}</div>
+          <div><b>Latitude</b> {{ d.lat != null ? d.lat : '—' }}</div>
+          <div><b>Longitude</b> {{ d.lng != null ? d.lng : '—' }}</div>
+
+          <!-- SAFE reads with fallback (prevents TS2532) -->
+          <div><b>Soil</b> {{ d.latest?.soilHumidity ?? '—' }}%</div>
+          <div><b>Luminosity</b> {{ d.latest?.luminosity ?? '—' }} lx</div>
+          <div><b>Humidity</b> {{ d.latest?.humidity ?? '—' }}%</div>
+          <div><b>Barometer</b> {{ d.latest?.barometer ?? '—' }} hPa</div>
+          <div><b>Temperature</b> {{ d.latest?.temperature ?? '—' }} °C</div>
+          <div><b>Updated</b> {{ d.latest?.timestamp | date:'short' }}</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

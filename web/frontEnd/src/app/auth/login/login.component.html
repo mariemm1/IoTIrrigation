@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="login.component.css">
+<div class="login-wrapper">
+
+  <!-- NEW: Back to home arrow -->
+  <a class="back-home" [routerLink]="['/']" aria-label="Back to home">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15.5 19.5L8 12l7.5-7.5M9 12h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Home</span>
+  </a>
+
+  <ng-particles
+    id="tsparticles"
+    [options]="particlesOptions"
+    [particlesInit]="particlesInit">
+  </ng-particles>
+
+  <div class="login-container">
+    <h2>Login to {{ orgDisplayName || expectedOrgId }} Portal</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" formControlName="username" required />
+        <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-message">
+          Username is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" required />
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+          Password is required.
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid">Login</button>
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

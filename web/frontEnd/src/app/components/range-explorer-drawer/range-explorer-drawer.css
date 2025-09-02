@@ -1,0 +1,98 @@
+/* Drawer (unchanged from last time, stays on top of app) */
+.drawer {
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,.28);
+  backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+  z-index: 4000; /* drawer */
+}
+.drawer.open { opacity: 1; pointer-events: auto; }
+
+.drawer-sheet {
+  position: absolute; right: 0; top: 0;
+  width: min(980px, 100%); height: 100%;
+  background: #fff;
+  border-left: 1px solid #e5e9f2;
+  box-shadow: -12px 0 30px rgba(2,6,23,.08);
+  transform: translateX(100%); transition: transform .25s ease;
+  overflow-y: auto; scroll-behavior: smooth;
+  border-top-left-radius: 14px; border-bottom-left-radius: 14px;
+}
+.drawer.open .drawer-sheet { transform: translateX(0); }
+
+/* Sticky header */
+.drawer-head {
+  position: sticky; top: 0; z-index: 3;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px;
+  background: linear-gradient(180deg,#ffffff 0%, #f7faff 100%);
+  border-bottom: 1px solid #eef2f7;
+  min-height: 56px;
+}
+.h-title { font-weight: 900; }
+.h-title small { display:block; color: #6a7280; font-weight: 700; }
+.x { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+
+/* Sticky filters toolbar */
+.filters-bar {
+  position: sticky; top: 56px; z-index: 2;
+  background: #ffffff;
+  border-bottom: 1px solid #eef2f7;
+  box-shadow: 0 6px 20px rgba(2,6,23,.04);
+  padding: 10px 16px 12px;
+}
+
+/* Controls grid & styles */
+.range-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(160px, 1fr));
+  gap: 10px; align-items: end;
+}
+@media (max-width: 1100px) { .range-grid { grid-template-columns: repeat(2, minmax(160px, 1fr)); } }
+
+.stack { display: grid; gap: 6px; font-weight: 800; color: #1f2937; }
+.stack span { font-size: .78rem; color: #6a7280; font-weight: 800; }
+.stack mat-form-field { width: 100%; }
+
+.range-grid select {
+  height: 34px; border: 1px solid #e5e9f2; border-radius: 8px;
+  padding: 0 8px; background: #fff; font-weight: 700; color: #1f2937;
+}
+
+.series-toggles { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.series-toggles label { font-weight: 800; color: #1f2937; }
+
+.actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* Info banners */
+.sub-banners { display: grid; gap: 6px; margin-top: 8px; }
+.banner { padding: 8px 10px; border-radius: 10px; font-weight: 800; font-size: .9rem; }
+.banner.warn  { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+.banner.info  { background: #ecfeff; color: #155e75; border: 1px solid #a5f3fc; }
+.banner.muted { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
+
+/* Content */
+.drawer-section { padding: 14px 16px 8px; }
+.chart-wrap { padding: 6px 0 24px; }
+
+/* Buttons */
+.btn { height: 32px; padding: 0 12px; border-radius: 8px; font-weight: 900; border: 1px solid transparent; cursor: pointer; background: #f8fafc; border-color: #e2e8f0; color: #0b1324; }
+.btn:hover { background: #eef2f7; }
+.btn.sm { height: 32px; }
+.btn.primary { background: #1fb6ff; border-color: #1fb6ff; color: #fff; }
+.btn.primary:disabled { opacity: .5; cursor: not-allowed; }
+.icon-left { display: inline-flex; align-items: center; gap: 6px; }
+.icon-left svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* >>> Make the Material datepicker overlay sit above the drawer <<< */
+/* We add a custom panelClass on the datepicker and push that pane over the drawer z-index */
+:host ::ng-deep .cdk-overlay-container .cdk-overlay-pane.range-datepicker-on-top {
+  z-index: 7000 !important; /* higher than .drawer (4000) */
+}
+
+/* (Optional safety) If your theme uses MDC classes, keep the content above as well */
+:host ::ng-deep .cdk-overlay-container .cdk-overlay-pane.range-datepicker-on-top .mat-datepicker-content,
+:host ::ng-deep .cdk-overlay-container .cdk-overlay-pane.range-datepicker-on-top .mat-mdc-datepicker-content {
+  z-index: 7001 !important;
+}

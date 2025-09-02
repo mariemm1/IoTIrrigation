@@ -1,0 +1,55 @@
+/* Layout: make the right cluster flush-right */
+.header{
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto; /* left grows, right hugs */
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+/* Brand */
+.brand{ display:flex; align-items:center; gap:10px; min-width:220px; }
+.brand-dot{
+  width:28px; height:28px; border-radius:999px;
+  background:#dbeafe; color:#1e40af; display:grid; place-items:center; font-weight:900;
+}
+.brand-text{ font-weight:900; letter-spacing:.2px; }
+.brand-text .muted{ color:#6a7280; font-weight:700; }
+
+/* Right side */
+.right-actions{
+  justify-self: end;                 /* pushes it to the far right */
+  display:flex; align-items:center; gap:12px; position:relative;
+}
+.hello{ color:#6a7280; }
+
+/* Buttons / avatar */
+.btn{
+  height:40px; padding:0 16px; border-radius:10px;
+  background:#e7f0ff; color:#1e40af; border:1px solid #c7dcff;
+  font-weight:900; cursor:pointer;
+}
+.btn.primary{ background:#1fb6ff; border-color:#1fb6ff; color:#fff; }
+.btn.primary:hover{ filter:brightness(0.95); }
+
+.avatar{
+  width:34px; height:34px; border-radius:999px;
+  background:#eaf2ff; color:#3b5bdb; display:grid; place-items:center;
+  font-weight:800; cursor:pointer; user-select:none;
+}
+
+/* Dropdown */
+.menu{
+  position:absolute; right:0; top:44px; width:200px;
+  background:#fff; border:1px solid #e8edf5; border-radius:10px;
+  box-shadow:0 14px 40px rgba(2,6,23,.10); padding:8px;
+}
+.menu-item{
+  display:flex; align-items:center; gap:8px;
+  width:100%; text-align:left; background:transparent; border:0;
+  padding:8px 10px; border-radius:8px; cursor:pointer;
+  color:#1f2937; font-weight:700;
+}
+.menu-item:hover{ background:#f5f7fb; }
+.menu-item svg{ width:16px; height:16px; fill:currentColor; }
+.menu-item.danger{ color:#b91c1c; }

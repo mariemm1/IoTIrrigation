@@ -1,0 +1,93 @@
+<div class="drawer" [class.open]="open" (click)="close()">
+  <div class="sheet" (click)="$event.stopPropagation()">
+    <!-- Head -->
+    <div class="head">
+      <b>Edit User</b>
+      <button class="x" (click)="close()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="body">
+      <!-- Banner -->
+      <div *ngIf="banner as b"
+           class="banner"
+           [class.error]="b.kind==='error'"
+           [class.success]="b.kind==='success'">
+        {{ b.message }}
+      </div>
+
+      <!-- Form -->
+      <form class="grid" (ngSubmit)="submit()">
+        <!-- Username -->
+        <label class="stack">
+          <span>Username <b class="req">*</b></span>
+          <input [(ngModel)]="username"
+                 name="username"
+                 required
+                 autocomplete="username"
+                 [disabled]="busy">
+          <small class="hint" *ngIf="!username?.trim()">Required.</small>
+          <small class="hint warn" *ngIf="usernameTaken">Username already exists.</small>
+        </label>
+
+        <!-- Email -->
+        <label class="stack">
+          <span>Email <b class="req">*</b></span>
+          <input type="email"
+                 [(ngModel)]="email"
+                 name="email"
+                 required
+                 autocomplete="email"
+                 [disabled]="busy">
+          <small class="hint" *ngIf="!email?.trim()">Required.</small>
+          <small class="hint warn" *ngIf="emailTaken">Email already in use.</small>
+        </label>
+
+        <!-- Password (optional, keep if blank) -->
+        <label class="stack">
+          <span>Password (leave blank to keep)</span>
+          <input type="password"
+                 [(ngModel)]="password"
+                 name="password"
+                 autocomplete="new-password"
+                 [disabled]="busy">
+          <small class="hint">Optional. Leave empty to keep the current password.</small>
+        </label>
+
+        <!-- Organization (read-only) -->
+        <div class="readonly">
+          <div class="label">Organization</div>
+          <div class="value">{{ orgName(organizationId) }}</div>
+          <small class="hint">Organization cannot be changed.</small>
+        </div>
+
+        <!-- Roles (read-only) -->
+        <div class="readonly">
+          <div class="label">Roles</div>
+          <div class="value pills" aria-readonly="true">
+            <span class="pill" *ngIf="roleAdmin">ADMIN</span>
+            <span class="pill" *ngIf="roleClient">CLIENT</span>
+            <span class="pill muted" *ngIf="!roleAdmin && !roleClient">NONE</span>
+          </div>
+          <small class="hint">Roles are read-only here.</small>
+        </div>
+
+        <!-- Notes / validation guidance -->
+        <div class="notes">
+          <ul>
+            <li>Fields marked with <b class="req">*</b> are required.</li>
+            <li>If you change the username or email, they must be unique.</li>
+            <li>Password is optional on edit; leave blank to keep it unchanged.</li>
+          </ul>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button class="btn" type="button" (click)="close()" [disabled]="busy">Cancel</button>
+          <button class="btn primary" type="submit" [disabled]="!valid || busy">
+            {{ busy ? 'Saving…' : 'Save' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

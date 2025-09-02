@@ -1,0 +1,35 @@
+:host { display: block; --surface: #ffffff; --surface-2: #f3f6fb; --ink: #0b1324; --muted: #6a7280; }
+:host ::ng-deep mat-spinner svg circle,
+:host ::ng-deep mat-progress-spinner svg circle { stroke: #1e40af !important; }
+
+.layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; background: var(--surface-2); }
+.main { padding: 18px 22px 40px; }
+
+/* top selectors */
+.top-controls { display:flex; gap:16px; align-items:center; margin-bottom:10px; }
+.top-controls label { font-weight:800; color:#1f2937; }
+.top-controls select { height:34px; border:1px solid #e5e9f2; border-radius:8px; padding:0 8px; background:#fff; font-weight:700; color:#1f2937; }
+
+/* KPIs — auto-fit to avoid blank columns */
+.summary { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:14px; }
+.kpi { background:linear-gradient(180deg, #fff, #f9fafc); border:1px solid #e7ecf5; border-radius:18px; padding:14px 16px; box-shadow:0 10px 30px rgba(2,6,23,.06); }
+.kpi-title { color: var(--muted); font-weight: 700; margin-bottom: 6px; font-size: .9rem; }
+.kpi-value { font-size: 1.6rem; font-weight: 900; color: #0b1324; }
+.kpi-value .unit { color: var(--muted); font-size: .9rem; font-weight: 700; }
+.kpi-value.online  { color: #059669; }
+.kpi-value.offline { color: #e11d48; }
+
+/* Single card container */
+.cards { display: grid; gap: 16px; }
+
+.error { color: #c62828; font-weight: 900; text-align: center; margin: 12px 0; }
+.spinner { display:flex; justify-content:center; margin: 40px 0; }
+
+/* Sidebar theme */
+.sidebar { background: #0f2740; color: #dbe6f4; }
+
+/* Make Add/Edit drawers always on top */
+:host ::ng-deep app-add-device-drawer .drawer,
+:host ::ng-deep app-edit-device-drawer .drawer {
+  z-index: 3000 !important; /* higher than map/range drawers */
+}

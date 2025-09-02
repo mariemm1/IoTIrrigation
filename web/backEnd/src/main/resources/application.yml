@@ -1,0 +1,32 @@
+spring:
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin}
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+server:
+  port: ${SERVER_PORT}
+
+logging:
+  level:
+    root: INFO
+    org.example.iotsysirrigation: DEBUG
+
+app:
+  admin:
+    username: ${APP_ADMIN_USERNAME}
+    password: ${APP_ADMIN_PASSWORD}
+    email: ${APP_ADMIN_EMAIL}
+  bootstrap:
+    org-name: ${APP_BOOTSTRAP_ORG_NAME}
+    org-address: ${APP_BOOTSTRAP_ORG_ADDRESS}
+    org-email: ${APP_BOOTSTRAP_ORG_EMAIL}
+    org-phone: ${APP_BOOTSTRAP_ORG_PHONE}
+
+
+chirpstack:
+  api:
+    base-url: ${CHIRPSTACK_API_BASE_URL}
+    token: ${CHIRPSTACK_API_TOKEN}

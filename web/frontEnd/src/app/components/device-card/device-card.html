@@ -1,0 +1,106 @@
+<article class="card" [attr.id]="'dev-' + device.devEui">
+  <div class="card-head">
+    <div class="id">
+      <h3 class="title">{{ device.name || device.devEui }}</h3>
+      <div class="subtitle">{{ device.devEui }}</div>
+    </div>
+    <div class="head-right" *ngIf="device.latest as L">
+      <span class="chip" [class.live]="L.fresh">{{ L.fresh ? 'Live' : 'Stale' }}</span>
+      <span class="stamp">{{ L.timestamp | date:'short' }}</span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="device.latest as L; else nodataTpl">
+    <div class="stat-row">
+      <button class="stat soil"
+              [style.--accent]="accentFor(L.soilHumidity, 0, 100)"
+              [style.--pct]="toPct(L.soilHumidity, 0, 100)"
+              (click)="openChart.emit('soilHumidity')">
+        <div class="title-line">
+          <span class="icon-ring"><span class="icon">💧</span></span>
+          <span class="label">Soil Humidity <span class="u">%</span></span>
+        </div>
+        <div class="value">
+          <span class="big">{{ L.soilHumidity !== null ? L.soilHumidity : '—' }}</span>
+          <span class="unit" *ngIf="L.soilHumidity !== null">%</span>
+        </div>
+      </button>
+
+      <button class="stat light"
+              [style.--accent]="accentFor(L.luminosity, 0, L.luminosityMax)"
+              [style.--pct]="toPct(L.luminosity, 0, L.luminosityMax)"
+              (click)="openChart.emit('luminosity')">
+        <div class="title-line">
+          <span class="icon-ring"><span class="icon">☀️</span></span>
+          <span class="label">Luminosity <span class="u">lx</span></span>
+        </div>
+        <div class="value">
+          <span class="big">{{ L.luminosity !== null ? L.luminosity : '—' }}</span>
+          <span class="unit" *ngIf="L.luminosity !== null">lx</span>
+        </div>
+      </button>
+
+      <button class="stat humid"
+              [style.--accent]="accentFor(L.humidity, 0, L.humidityMax)"
+              [style.--pct]="toPct(L.humidity, 0, L.humidityMax)"
+              (click)="openChart.emit('humidity')">
+        <div class="title-line">
+          <span class="icon-ring"><span class="icon">💦</span></span>
+          <span class="label">Humidity <span class="u">%</span></span>
+        </div>
+        <div class="value">
+          <span class="big">{{ L.humidity !== null ? L.humidity : '—' }}</span>
+          <span class="unit" *ngIf="L.humidity !== null">%</span>
+        </div>
+      </button>
+
+      <button class="stat baro"
+              [style.--accent]="accentFor(L.barometer, 0, L.barometerMax)"
+              [style.--pct]="toPct(L.barometer, 0, L.barometerMax)"
+              (click)="openChart.emit('barometer')">
+        <div class="title-line">
+          <span class="icon-ring"><span class="icon">📈</span></span>
+          <span class="label">Barometer <span class="u">hPa</span></span>
+        </div>
+        <div class="value">
+          <span class="big">{{ L.barometer !== null ? L.barometer : '—' }}</span>
+          <span class="unit" *ngIf="L.barometer !== null">hPa</span>
+        </div>
+      </button>
+
+      <button class="stat temp"
+              [style.--accent]="accentFor(L.temperature, 0, L.temperatureMax)"
+              [style.--pct]="toPct(L.temperature, 0, L.temperatureMax)"
+              (click)="openChart.emit('temperature')">
+        <div class="title-line">
+          <span class="icon-ring"><span class="icon">🌡️</span></span>
+          <span class="label">Temperature <span class="u">°C</span></span>
+        </div>
+        <div class="value">
+          <span class="big">{{ L.temperature !== null ? L.temperature : '—' }}</span>
+          <span class="unit" *ngIf="L.temperature !== null">°C</span>
+        </div>
+      </button>
+
+      <div class="stat irrig"
+           (click)="openIrrigation.emit()">
+        <div class="title-line">
+          <span class="icon-ring"><span class="icon">🚰</span></span>
+          <span class="label">Irrigation</span>
+        </div>
+        <div class="value">
+          <span class="big">{{ L.command === 1 ? 'ON' : (L.command === 0 ? 'OFF' : '—') }}</span>
+        </div>
+
+        <div class="cmd-mini" *ngIf="canCommand">
+          <button class="btn success sm" (click)="$event.stopPropagation(); command.emit('OPEN')"  [disabled]="busy">Open</button>
+          <button class="btn danger  sm" (click)="$event.stopPropagation(); command.emit('CLOSE')" [disabled]="busy">Close</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #nodataTpl>
+    <div class="no-data">No readings yet…</div>
+  </ng-template>
+</article>

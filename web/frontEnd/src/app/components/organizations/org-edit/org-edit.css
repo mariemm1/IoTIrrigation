@@ -1,0 +1,21 @@
+/* mirrors add drawer styles for consistency */
+.drawer { position: fixed; inset: 0; background: rgba(2,6,23,.28); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 95; }
+.drawer.open { opacity: 1; pointer-events: auto; }
+.sheet { position: absolute; right: 0; top: 0; width: min(560px, 100%); height: 100%; background: #fff; border-left: 1px solid #e5e9f2; box-shadow: -12px 0 30px rgba(2,6,23,.12); transform: translateX(100%); transition: transform .25s ease; overflow-y: auto; }
+.drawer.open .sheet { transform: translateX(0); }
+.head { position: sticky; top: 0; background:#fff; display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #eef2f7; }
+.x { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.body { padding: 16px; }
+.grid { display: grid; gap: 12px; }
+.stack { display: grid; gap: 6px; font-weight: 800; color: #1f2937; }
+.stack span { font-size: .85rem; color: #6a7280; font-weight: 800; }
+input, textarea { border: 1px solid #e5e9f2; border-radius: 8px; padding: 10px; background: #fff; font-weight: 700; color: #1f2937; }
+textarea { resize: vertical; min-height: 80px; }
+.req { color: #b91c1c; }
+.hint { color: #64748b; font-weight: 700; }
+.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.btn { height: 36px; padding: 0 14px; border-radius: 8px; font-weight: 900; border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; }
+.btn.primary { background: #22c55e; border-color: #22c55e; color: #fff; }
+.banner { margin-bottom: 12px; padding: 10px 12px; border-radius: 10px; font-weight: 800; border: 1px solid transparent; }
+.banner.success { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+.banner.error   { background: #fef2f2; border-color: #fecaca; color: #7f1d1d; }

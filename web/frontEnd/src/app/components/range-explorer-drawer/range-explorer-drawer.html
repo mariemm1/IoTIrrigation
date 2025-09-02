@@ -1,0 +1,75 @@
+<div class="drawer" [class.open]="open" (click)="doClose()">
+  <div class="drawer-sheet" (click)="$event.stopPropagation()">
+    <header class="drawer-head">
+      <div class="h-title">
+        Range Explorer
+        <small>{{ device?.name || device?.devEui }}</small>
+      </div>
+      <button class="x" (click)="doClose()">✕</button>
+    </header>
+
+    <!-- Sticky filters -->
+    <div class="filters-bar">
+      <div class="range-grid">
+        <div class="stack">
+          <span>From</span>
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="fromDp" [matDatepickerFilter]="dateEnabled"
+                   [value]="rangeSel.start" (dateChange)="rangeSel.start=$event.value!; onRangeChange()"
+                   [matDatepickerFilter]="dateEnabled">
+            <mat-datepicker-toggle matSuffix [for]="fromDp"></mat-datepicker-toggle>
+            <mat-datepicker #fromDp panelClass="range-datepicker-on-top"></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="stack">
+          <span>To</span>
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="toDp" [matDatepickerFilter]="dateEnabled"
+                   [value]="rangeSel.end" (dateChange)="rangeSel.end=$event.value!; onRangeChange()"
+                   [matDatepickerFilter]="dateEnabled">
+            <mat-datepicker-toggle matSuffix [for]="toDp"></mat-datepicker-toggle>
+            <mat-datepicker #toDp panelClass="range-datepicker-on-top"></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="stack">
+          <span>Granularity</span>
+          <select [(ngModel)]="granularity" (change)="onGranularityChange()">
+            <option value="30m">30 minutes</option>
+            <option value="hour">Hourly</option>
+            <option value="day">Daily</option>
+          </select>
+        </div>
+
+        <div class="series-toggles">
+          <label><input type="checkbox" [(ngModel)]="seriesSel.avg" (change)="onSeriesToggle()"> Avg</label>
+          <label><input type="checkbox" [(ngModel)]="seriesSel.min" (change)="onSeriesToggle()"> Min</label>
+          <label><input type="checkbox" [(ngModel)]="seriesSel.max" (change)="onSeriesToggle()"> Max</label>
+          <label><input type="checkbox" [(ngModel)]="seriesSel.realtime" (change)="onSeriesToggle()"> Realtime</label>
+        </div>
+
+        <div class="actions">
+          <button class="btn sm" (click)="onRangeChange()">Show</button>
+          <button class="btn sm primary" (click)="downloadCSVRange()">CSV</button>
+        </div>
+      </div>
+
+      <div class="sub-banners">
+        <div class="banner warn" *ngIf="availabilityLoading">Loading availability…</div>
+        <div class="banner muted" *ngIf="noDataInRange">No data in this range — axes are shown for reference.</div>
+      </div>
+    </div>
+
+    <section class="drawer-section">
+      <div class="chart-wrap">
+        <canvas
+          baseChart
+          [type]="chartType"
+          [data]="rangeLine"
+          [options]="rangeOptions">
+        </canvas>
+      </div>
+    </section>
+  </div>
+</div>

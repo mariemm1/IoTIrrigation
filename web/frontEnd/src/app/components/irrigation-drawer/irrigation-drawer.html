@@ -1,0 +1,31 @@
+<div class="drawer" [class.open]="open" (click)="doClose()">
+  <div class="drawer-sheet" (click)="$event.stopPropagation()">
+    <div class="drawer-head">
+      <div class="h-title">
+        Irrigation History
+        <small *ngIf="device">{{ device.name || device.devEui }}</small>
+      </div>
+      <button class="x" (click)="doClose()">✕</button>
+    </div>
+
+    <section class="drawer-section">
+      <div class="banner muted">Showing last 30 days of valve commands.</div>
+
+      <div class="rows" *ngIf="!loading; else loadTpl">
+        <div class="empty" *ngIf="rows.length === 0">No command events found.</div>
+
+        <ul class="timeline" *ngIf="rows.length">
+          <li *ngFor="let r of rows">
+            <span class="dot" [class.open]="r.value===1" [class.close]="r.value===0"></span>
+            <span class="desc"><b>{{ r.value === 1 ? 'OPEN' : 'CLOSE' }}</b></span>
+            <span class="ts">{{ r.ts | date:'medium' }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <ng-template #loadTpl>
+        <div class="banner warn">Loading…</div>
+      </ng-template>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+/* overlay while loading */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  z-index: 4000;
+}
+:host { display: block; --surface: #ffffff; --surface-2: #f3f6fb; --ink: #0b1324; --muted: #6a7280; }
+:host ::ng-deep mat-spinner svg circle,
+:host ::ng-deep mat-progress-spinner svg circle { stroke: #1e40af !important; }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; background: var(--surface-2); }
+.main { padding: 18px 22px 40px; }
+.sidebar { background: #0f2740; color: #dbe6f4; }
+
+/* scope row */
+.scope-row { display:flex; gap:16px; align-items:center; margin: 4px 0 12px; }
+.scope-row .spacer { flex: 1; }
+.scope-row label { font-weight:800; color:#1f2937; display:flex; align-items:center; gap:8px; }
+.scope-row select { height:34px; border:1px solid #e5e9f2; border-radius:8px; padding:0 8px; background:#fff; font-weight:700; color:#1f2937; }
+
+/* KPIs */
+.summary { display:grid; grid-template-columns:repeat(3, minmax(180px, 1fr)); gap:14px; margin-bottom:16px; }
+.kpi { background:linear-gradient(180deg, #fff, #f9fafc); border:1px solid #e7ecf5; border-radius:18px; padding:16px; box-shadow:0 10px 30px rgba(2,6,23,.06); }
+.kpi-title { color: var(--muted); font-weight: 700; margin-bottom: 6px; font-size: .9rem; }
+.kpi-value { font-size: 1.7rem; font-weight: 900; color: #0b1324; line-height: 1; }
+.kpi-value.online  { color: #059669; }
+.kpi-value.offline { color: #e11d48; }
+
+/* Card container */
+.cards { display: grid; gap: 16px; }
+
+.error { margin: 8px 0; color: #b91c1c; font-weight: 800; }
+
+/* Right sliding panel (for list pages) */
+.right-panel{
+  position:fixed; top:0; right:0; width:min(780px,100%); height:100%;
+  background:#fff; border-left:1px solid #e5e9f2; box-shadow:-12px 0 30px rgba(2,6,23,.08);
+  transform:translateX(100%); transition:transform .25s ease; z-index:3000; overflow:auto;
+}
+.right-panel.open{ transform:translateX(0); }
+.panel-head{position:sticky; top:0; background:#fff; display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid #eef2f7;}
+.panel-head .x{background:#f1f5f9; border:1px solid #e2e8f0; border-radius:8px; padding:6px 10px; cursor:pointer;}
+
+/* Empty states */
+.empty-main {
+  margin: 8px 0 16px;
+  padding: 14px 16px;
+  border: 1px dashed #d1d9e6;
+  background: #f8fafc;
+  color: #374151;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+/* Drawers top-most */
+:host ::ng-deep app-add-device-drawer .drawer,
+:host ::ng-deep app-edit-device-drawer .drawer,
+:host ::ng-deep app-org-add .drawer,
+:host ::ng-deep app-user-add .drawer,
+:host ::ng-deep app-irrigation-drawer .drawer {
+  z-index: 5000 !important;
+}
+
+

@@ -1,0 +1,93 @@
+<div class="wrap">
+  <!-- head row: search left, add buttons right -->
+  <div class="head-row">
+    <input
+      class="search"
+      placeholder="Search username or email…"
+      [(ngModel)]="q"
+      (ngModelChange)="onSearchChange($event)" />
+
+    <div class="spacer"></div>
+
+    <button class="btn primary" (click)="openAdd('ADMIN')">+ Admin</button>
+    <button class="btn success" (click)="openAdd('CLIENT')">+ Client</button>
+  </div>
+
+  <div *ngIf="error" class="banner error">{{ error }}</div>
+
+  <div class="table">
+    <div class="thead">
+      <div>#</div>
+      <div>Username</div>
+      <div>Email</div>
+
+      <!-- Organization with funnel -->
+      <div class="th-filter">
+        <span>Organization</span>
+        <button class="icon filter" title="Filter organizations" (click)="toggleOrgMenu($event)">⏷</button>
+        <div class="menu" *ngIf="orgMenuOpen" (click)="$event.stopPropagation()">
+          <button class="menu-item" (click)="setOrgFilter('ALL')">All organizations</button>
+          <button class="menu-item" *ngFor="let o of orgs" (click)="setOrgFilter(o.id!)">{{ o.name }}</button>
+        </div>
+      </div>
+
+      <!-- Roles with funnel -->
+      <div class="th-filter">
+        <span>Roles</span>
+        <button class="icon filter" title="Filter roles" (click)="toggleRoleMenu($event)">⏷</button>
+        <div class="menu" *ngIf="roleMenuOpen" (click)="$event.stopPropagation()">
+          <button class="menu-item" (click)="setRoleFilter('ALL')">All roles</button>
+          <button class="menu-item" (click)="setRoleFilter('ADMIN')">Admins</button>
+          <button class="menu-item" (click)="setRoleFilter('CLIENT')">Clients</button>
+        </div>
+      </div>
+
+      <div class="ta-right">Actions</div>
+    </div>
+
+    <div class="trow" *ngFor="let u of filtered; index as i; trackBy: trackById">
+      <div class="muted">{{ i + 1 }}</div>
+      <div class="strong">{{ u.username }}</div>
+      <div>{{ u.email }}</div>
+
+      <div>{{ orgName(orgIdOf(u)) }}</div>
+
+      <div class="roles">
+        <span class="chip" *ngFor="let r of rolesOf(u)">{{ r }}</span>
+        <span class="muted" *ngIf="!rolesOf(u).length">—</span>
+      </div>
+
+      <div class="acts">
+        <button class="icon" title="Edit" (click)="openEdit(u)">✏️</button>
+        <button class="icon danger" title="Delete" (click)="del(u)">🗑️</button>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="!loading && !filtered.length">
+      No users match your filters.
+    </div>
+  </div>
+
+  <!-- Drawers (gated to avoid template typing errors) -->
+  <ng-container *ngIf="addOpen && addPreset as pr">
+    <app-user-add
+      [open]="true"
+      [organizations]="orgs"
+      [users]="users"
+      [presetRole]="pr"
+      (closed)="onAddClosed()"
+      (created)="onAdded()">
+    </app-user-add>
+  </ng-container>
+
+  <ng-container *ngIf="editOpen && toEdit as u">
+    <app-user-edit
+      [open]="true"
+      [user]="u"
+      [organizations]="orgs"
+      [users]="users"
+      (closed)="onEditClosed()"
+      (saved)="onEdited()">
+    </app-user-edit>
+  </ng-container>
+</div>

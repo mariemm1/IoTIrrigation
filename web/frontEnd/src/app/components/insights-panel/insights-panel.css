@@ -1,0 +1,82 @@
+.insights-wrap { display:flex; flex-direction:column; gap:12px; }
+
+/* Tabs */
+.agg-tabs { display:flex; gap:8px; margin:6px 0 2px; }
+.tab { border:1px solid #d1d5db; background:#fff; border-radius:10px; padding:8px 12px; font-weight:800; cursor:pointer; }
+.tab.active { background:#0f2740; color:#eaf2f8; border-color:#0f2740; }
+
+.map-and-legend { display:grid; grid-template-columns:1fr 300px; gap:16px; align-items:start; }
+
+.map-host { width:100%; height:520px; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.12); }
+
+.legend { background:#0f2740; color:#eaf2f8; border-radius:12px; padding:16px 14px; height:520px; overflow:auto; }
+.legend-title { font-weight:600; font-size:18px; margin-bottom:8px; }
+.legend-sub { opacity:.9; margin-bottom:12px; }
+.legend-list { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+.legend-list li { display:grid; grid-template-columns:20px 1fr; gap:10px; align-items:center; }
+.legend-list .swatch { width:18px; height:18px; border-radius:50%; display:inline-block; box-shadow:inset 0 0 0 2px rgba(0,0,0,.25); }
+
+/* Matching ⛔ stop icon in the legend */
+.legend-list .no-data .no-swatch {
+  width:18px; height:18px; border-radius:50%;
+  display:inline-grid; place-items:center; background:#ef4444; color:#fff;
+  box-shadow:0 0 0 2px #fff, inset 0 0 0 1px rgba(0,0,0,.2);
+  position:relative;
+}
+.legend-list .no-data .no-swatch::after {
+  content:''; width:10px; height:2px; border-radius:2px; background:#fff;
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+}
+
+.tip-name { font-weight:600; margin-bottom:2px; }
+.tip-value { font-size:12px; }
+.leaflet-popup-content .tip-name { font-weight:700; margin-bottom:4px; }
+.leaflet-popup-content .tip-meta { color:#6b7280; font-size:12px; margin-top:4px; }
+
+/* charts under the map */
+.charts-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px; }
+.chart-card { background:#fff; border:1px solid #e7ecf5; border-radius:12px; padding:10px 12px; box-shadow:0 6px 20px rgba(2,6,23,.05); min-height:240px; }
+.chart-title { font-weight:700; color:#0b1324; margin-bottom:8px; }
+.chart-host { position:relative; width:100%; height:220px; }
+.chart-host canvas { position:absolute; inset:0; }
+
+/* ===== Custom Leaflet pins (divIcon) ===== */
+:host ::ng-deep .leaflet-div-icon { background: transparent; border: none; }
+
+:host ::ng-deep .pin {
+  width:22px; height:22px; border-radius:50%;
+  position:relative; transform: translateY(-4px);
+  box-shadow:0 0 0 2px #fff; /* white ring */
+}
+
+/* Data dot (colored by legend) */
+:host ::ng-deep .pin.dot {
+  background: var(--pin-color, #60a5fa);
+}
+:host ::ng-deep .pin.dot .minus { display:none; }
+
+/* No data / offline: red stop with minus */
+:host ::ng-deep .pin.nodata {
+  background:#ef4444; /* red */
+}
+:host ::ng-deep .pin .minus {
+  position:absolute; left:50%; top:50%;
+  width:12px; height:2px; background:#fff; border-radius:2px;
+  transform: translate(-50%,-50%);
+}
+
+/* Selected/glowing pin */
+@keyframes pinPulse {
+  0%   { box-shadow: 0 0 0 2px #fff, 0 0 0 0 rgba(59,130,246,.45); }
+  70%  { box-shadow: 0 0 0 2px #fff, 0 0 0 14px rgba(59,130,246,0); }
+  100% { box-shadow: 0 0 0 2px #fff, 0 0 0 0 rgba(59,130,246,0); }
+}
+:host ::ng-deep .pin.selected {
+  animation: pinPulse 1.8s ease-out infinite;
+  outline: 0; /* prevents extra rings on some browsers */
+}
+
+/* Small tooltip tweak so it doesn’t hide the pin shadow */
+:host ::ng-deep .leaflet-tooltip {
+  pointer-events: none;
+}

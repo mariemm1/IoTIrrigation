@@ -1,0 +1,21 @@
+<section id="home" class="section section-home">
+  <div id="map-home"></div>
+
+  <div class="home-overlay">
+    <h1 class="home-title">IoT Irrigation Network</h1>
+    <p class="home-subtitle">Empowering agriculture with smart, connected solutions</p>
+
+    <div class="center-panel">
+      <h2>Select Your Organization</h2>
+      <select [(ngModel)]="selectedOrgId" aria-label="Choose organization">
+        <option value="">— Choose your Organization —</option>
+        <option *ngFor="let o of organizations" [value]="getOrgId(o)">
+          {{ o.name }}
+        </option>
+      </select>
+      <button (click)="goToLogin()" [disabled]="!selectedOrgId">
+        Proceed to Login
+      </button>
+    </div>
+  </div>
+</section>

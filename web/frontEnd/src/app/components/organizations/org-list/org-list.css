@@ -1,0 +1,20 @@
+.wrap { display:grid; gap:12px; }
+.head-row{ display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; }
+.toolbar{ display:flex; gap:8px; align-items:center; }
+.search{ height:36px; padding:0 10px; border-radius:10px; border:1px solid #e5e9f2; background:#fff; min-width:260px; }
+.btn{ height:36px; padding:0 14px; border-radius:10px; font-weight:900; border:1px solid #1fb6ff; background:#1fb6ff; color:#fff; cursor:pointer; }
+
+.table { background:#fff; border:1px solid #eef2f7; border-radius:14px; overflow:hidden; }
+.thead, .trow { display:grid; grid-template-columns: 60px 1.1fr 1.2fr 1.2fr 1fr 120px; gap:10px; align-items:center; }
+.thead { background:#f7f9fc; padding:10px 12px; font-weight:900; color:#475569; }
+.trow  { padding:12px; border-top:1px solid #f1f5g9; }
+.trow:nth-child(odd){ background:#fbfdff; }
+.strong{ font-weight:900; }
+.muted{ color:#8a95a4; }
+.acts{ display:flex; gap:6px; justify-content:flex-end; }
+.icon{ width:34px; height:34px; border-radius:8px; border:1px solid #e2e8f0; background:#f8fafc; display:grid; place-items:center; cursor:pointer; }
+.icon:hover{ background:#eef2f7; }
+.icon.danger{ border-color:rgba(239,68,68,.35); }
+.icon.danger:hover{ background:rgba(239,68,68,.1); }
+.empty{ padding:18px; text-align:center; color:#6b7280; font-weight:800; }
+.banner.error { padding:10px 12px; border-radius:10px; background:#fef2f2; color:#7f1d1d; border:1px solid #fecaca; }

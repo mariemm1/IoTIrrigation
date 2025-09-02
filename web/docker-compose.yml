@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./backEnd
+      dockerfile: Dockerfile.backend
+    container_name: backend
+    restart: unless-stopped
+    env_file:
+      - ./.env  # Explicitly reference the .env file in the parent directory 
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATA_MONGODB_URI: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin
+      CHIRPSTACK_API_BASE_URL: ${CHIRPSTACK_API_BASE_URL}
+      CHIRPSTACK_API_TOKEN: ${CHIRPSTACK_API_TOKEN}
+    ports:
+      - "8081:8081"
+    networks:
+      - my_network
+    
+
+  frontend:
+    build:
+      context: ./frontEnd
+      dockerfile: Dockerfile.ssr
+    container_name: frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:8081
+      NODE_OPTIONS: --max-old-space-size=2048
+    depends_on:
+      - backend
+    ports:
+      - "4200:4000"
+    networks:
+      - my_network
+    
+networks:
+  my_network:
+   external: true
+

@@ -1,0 +1,85 @@
+<nav class="nav">
+  <!-- Users -->
+  <section class="tree-section">
+    <button class="tree-head" (click)="toggleUsers()" [attr.aria-expanded]="usersOpen">
+      <span class="chev" [class.open]="usersOpen">›</span>
+      <span class="label">Users</span>
+    </button>
+
+    <div class="tree-body" *ngIf="usersOpen">
+      <button class="tree-link">
+        <span class="lead-icon">＋</span>
+        <span (click)="addUserAdmin.emit()">Add admin</span>
+      </button>
+      <button class="tree-link">
+        <span class="lead-icon">＋</span>
+        <span (click)="addUserClient.emit()">Add client</span>
+      </button>
+      <button class="tree-link">
+        <span class="lead-icon">≡</span>
+        <span (click)="listUsers.emit()">Users list</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Organizations -->
+  <section class="tree-section">
+    <button class="tree-head" (click)="toggleOrgs()" [attr.aria-expanded]="orgsOpen">
+      <span class="chev" [class.open]="orgsOpen">›</span>
+      <span class="label">Organizations</span>
+    </button>
+
+    <div class="tree-body" *ngIf="orgsOpen">
+      <button class="tree-link subtle" (click)="addOrganization.emit()">
+        <span class="lead-icon">＋</span>
+        <span>Add organization</span>
+      </button>
+      <button class="tree-link subtle" (click)="listOrganizations.emit()">
+        <span class="lead-icon">≡</span>
+        <span>Organizations list</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Devices (all orgs, grouped like your ref) -->
+  <section class="tree-section">
+    <button class="tree-head" (click)="toggleDevices()" [attr.aria-expanded]="devicesOpen">
+      <span class="chev" [class.open]="devicesOpen">›</span>
+      <span class="label">Devices</span>
+    </button>
+
+    <div class="tree-body" *ngIf="devicesOpen">
+      <div class="dev-org" *ngFor="let o of organizations">
+        <div class="org-line">
+          <button class="org-chip" (click)="toggleDevOrg(o)">
+            <span class="chev sm" [class.open]="isDevOrgOpen(o)">▾</span>
+            <span class="name">{{ o.name }} <span class="muted">devices</span></span>
+          </button>
+          <button class="mini action" title="Add device"
+                  (click)="$event.stopPropagation(); addDeviceForOrg.emit(o.id!)">＋</button>
+        </div>
+
+        <!-- ✅ use helper to avoid indexing with possibly-undefined id -->
+        <div class="tree-body nested" *ngIf="devsFor(o).length; else noDevs" [hidden]="!isDevOrgOpen(o)">
+          <div class="dev-row" *ngFor="let d of devsFor(o)">
+            <button class="tree-link small chip"
+                    [class.selected]="isSelectedDev(d)"
+                    (click)="selectDeviceAdmin.emit(d)">
+              <span class="state" [class.on]="d.latest?.fresh"></span>
+              <span class="label">{{ d.name || d.devEui }}</span>
+            </button>
+            <div class="dev-acts">
+              <button class="icon edit" title="Edit" (click)="editDeviceAdmin.emit(d)">✎</button>
+              <button class="icon del"  title="Delete" (click)="deleteDeviceAdmin.emit(d)">🗑</button>
+            </div>
+          </div>
+        </div>
+        <ng-template #noDevs>
+          <div class="tree-body nested" [hidden]="!isDevOrgOpen(o)">
+            <div class="empty-side">No devices yet</div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+</nav>

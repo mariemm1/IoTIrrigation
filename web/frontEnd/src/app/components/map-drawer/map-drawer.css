@@ -1,0 +1,50 @@
+/* Drawer shell */
+.drawer { position: fixed; inset: 0; background: rgba(15,23,42,.25); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 1200; }
+.drawer.open { opacity: 1; pointer-events: auto; }
+.drawer-sheet {
+  position: absolute; right: 0; top: 0; width: min(960px, 100%); height: 100%;
+  background: #fff; border-left: 1px solid #e5e9f2; box-shadow: -12px 0 30px rgba(2,6,23,.08);
+  transform: translateX(100%); transition: transform .25s ease;
+  overflow-y: auto; scroll-behavior: smooth; scrollbar-gutter: stable;
+}
+.drawer.open .drawer-sheet { transform: translateX(0); }
+.drawer-head { position: sticky; top: 0; background:#fff; display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #eef2f7; z-index: 2; }
+.drawer-head.blue { background: #e6f0ff; border-bottom-color: #c7dcff; }
+.h-title { font-weight: 900; }
+.h-title small { display:block; color: #6a7280; font-weight: 700; }
+.x { background: #f1f5g9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+
+.drawer-section { padding: 14px 16px 8px; }
+
+/* Map */
+.map-sheet { display: flex; flex-direction: column; }
+.map-body { position: relative; height: 52vh; padding: 8px 0 0; }
+#deviceMap,
+.leaflet-host,
+.leaflet-container { width: 100%; height: 100%; border-radius: 12px; overflow: hidden; }
+
+/* Ensure our custom divIcon renders despite view-encapsulation */
+:host ::ng-deep .dev-marker { background: transparent !important; border: none !important; }
+:host ::ng-deep .dev-marker .pin {
+  position: relative; width: 20px; height: 20px; transform: translateY(-6px) rotate(45deg);
+  background: var(--pin-color, #9ca3af); border-radius: 7px 7px 0 7px; box-shadow: 0 0 0 2px #fff;
+}
+:host ::ng-deep .dev-marker .pin.selected {
+  /* subtle highlight for the focused device */
+  box-shadow: 0 0 0 2px #fff, 0 0 0 6px rgba(59,130,246,.45);
+}
+:host ::ng-deep .dev-marker .pin .pin-dot {
+  position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #fff; left: 7px; top: 7px; transform: rotate(-45deg);
+}
+
+/* Popup content */
+.pop { font: 12px/1.35 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; color: #0b1324; }
+.p-title { font-weight: 800; margin-bottom: 2px; }
+.p-sub   { color: #6b7280; font-weight: 700; margin-bottom: 6px; }
+.p-grid  { display: grid; grid-template-columns: repeat(2, minmax(90px, 1fr)); gap: 6px 12px; }
+.p-ts    { color: #6b7280; margin-top: 6px; }
+
+/* Info panel under map */
+.map-info { padding: 10px 0 4px; }
+.info-title { font-weight: 900; margin: 6px 0 10px; }
+.info-grid  { display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr)); gap: 8px 16px; }

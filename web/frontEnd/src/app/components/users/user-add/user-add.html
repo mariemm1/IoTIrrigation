@@ -1,0 +1,52 @@
+<div class="drawer" [class.open]="open" (click)="close()">
+  <div class="sheet" (click)="$event.stopPropagation()">
+    <div class="head">
+      <b>Add User</b>
+      <button class="x" (click)="close()">✕</button>
+    </div>
+
+    <div class="body">
+      <div *ngIf="banner as b" class="banner" [class.error]="b.kind==='error'" [class.success]="b.kind==='success'">{{ b.message }}</div>
+
+      <form class="grid" (ngSubmit)="submit()">
+        <label class="stack">
+          <span>Username <b class="req">*</b></span>
+          <input [(ngModel)]="username" name="username" [disabled]="busy" />
+          <small class="hint" *ngIf="!username.trim()">Required.</small>
+          <small class="hint warn" *ngIf="usernameTaken">This username already exists.</small>
+        </label>
+
+        <label class="stack">
+          <span>Email <b class="req">*</b></span>
+          <input type="email" [(ngModel)]="email" name="email" [disabled]="busy" />
+          <small class="hint" *ngIf="!email.trim()">Required.</small>
+          <small class="hint warn" *ngIf="emailTaken">This email is already in use.</small>
+        </label>
+
+        <label class="stack">
+          <span>Password <b class="req">*</b></span>
+          <input type="password" [(ngModel)]="password" name="password" [disabled]="busy" />
+          <small class="hint" *ngIf="!password.trim()">Required (min 6 recommended).</small>
+        </label>
+
+        <label class="stack">
+          <span>Organization <b class="req">*</b></span>
+          <select [(ngModel)]="organizationId" name="org" [disabled]="busy">
+            <option value="" disabled>Select organization</option>
+            <option *ngFor="let o of organizations" [value]="o.id">{{ o.name }}</option>
+          </select>
+          <small class="hint" *ngIf="!organizationId">Required.</small>
+        </label>
+
+        <div class="lock-role">
+          {{ lockLabel() }}
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="button" (click)="close()" [disabled]="busy">Cancel</button>
+          <button class="btn primary" type="submit" [disabled]="!valid || busy">{{busy?'Creating…':'Create'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
