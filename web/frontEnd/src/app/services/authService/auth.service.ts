@@ -1,3 +1,4 @@
+// src/app/services/authService/auth.service.ts
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -57,6 +58,16 @@ export class AuthService {
     if (this.orgId)          this.lsSet('orgId', this.orgId);
     if (this.orgName)        this.lsSet('orgName', this.orgName);
     if (this.loggedUsername) this.lsSet('username', this.loggedUsername);
+
+    // NEW: also store JWT in a cookie so SSR can read it on first render/refresh
+    if (this.hasBrowser) {
+      const decoded: any = this.helper.decodeToken(token) || {};
+      const nowSec = Math.floor(Date.now() / 1000);
+      const maxAge = typeof decoded?.exp === 'number'
+        ? Math.max(0, decoded.exp - nowSec)
+        : 7 * 24 * 60 * 60; // fallback 7 days
+      document.cookie = `jwt=${token}; Path=/; SameSite=Lax; Max-Age=${maxAge}`;
+    }
   }
 
   loadToken(): void {
@@ -69,7 +80,7 @@ export class AuthService {
       // hydrate cached org info from storage if missing
       this.orgId   = this.orgId   || this.lsGet('orgId')   || undefined;
       this.orgName = this.orgName || this.lsGet('orgName') || undefined;
-      this.roles   = this.roles   || this.lsGet('role')    || undefined as any;
+      this.roles   = this.roles   || this.lsGet('role')    || (undefined as any);
       this.loggedUsername = this.loggedUsername || this.lsGet('username') || undefined;
     }
   }
@@ -116,6 +127,11 @@ export class AuthService {
     this.lsRemove('orgId');
     this.lsRemove('orgName');
     this.lsRemove('username');
+
+    // NEW: clear cookie too
+    if (this.hasBrowser) {
+      document.cookie = 'jwt=; Path=/; Max-Age=0; SameSite=Lax';
+    }
 
     this.router.navigate(['/login', org]);
   }
@@ -168,3 +184,4 @@ export class AuthService {
     return this.orgName || this.lsGet('orgName') || '';
   }
 }
+
