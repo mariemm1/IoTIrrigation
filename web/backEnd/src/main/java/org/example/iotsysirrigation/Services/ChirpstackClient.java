@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
+import java.util.Base64;
 import java.util.*;
 
 @Service
@@ -136,6 +136,36 @@ public class ChirpstackClient {
 
         } catch (Exception e) {
             log.error("updateDeviceMeta failed for {}", devEui, e);
+            return false;
+        }
+    }
+
+     /** POST /api/devices/{devEui}/queue  (ChirpStack v4)
+     *  Sends a single byte: 0x01 for OPEN, 0x00 for CLOSE. Default fPort=2.
+     */
+    public boolean enqueueDownlink(String devEui, int value, Integer fPort) {
+        try {
+            String url = baseUrl + "/api/devices/" + devEui + "/queue";
+            HttpHeaders headers = authHeaders();
+
+            Map<String, Object> item = new HashMap<>();
+            item.put("confirmed", false);
+            item.put("fPort", (fPort != null ? fPort : 2));
+            item.put("data", Base64.getEncoder().encodeToString(new byte[]{ (byte) (value > 0 ? 1 : 0) }));
+
+            Map<String, Object> wrapper = new HashMap<>();
+            wrapper.put("deviceQueueItem", item);
+
+            HttpEntity<Map<String, Object>> req = new HttpEntity<>(wrapper, headers);
+            ResponseEntity<String> resp = restTemplate.exchange(url, HttpMethod.POST, req, String.class);
+
+            if (!resp.getStatusCode().is2xxSuccessful()) {
+                log.warn("enqueueDownlink failed for {}: {}", devEui, resp.getStatusCode());
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("enqueueDownlink error for {}", devEui, e);
             return false;
         }
     }

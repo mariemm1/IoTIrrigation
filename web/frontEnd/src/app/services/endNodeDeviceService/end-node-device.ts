@@ -55,4 +55,18 @@ export class DeviceService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/delete/${id}`);
   }
+
+
+
+  sendCommand(devEui: string, action: 'OPEN'|'CLOSE') {
+    const eui = this.normEui(devEui);
+    const value = action === 'OPEN' ? 1 : 0;
+    // we also send fPort explicitly (2)
+    return this.http.post(`/api/commands/${encodeURIComponent(eui)}`, {
+      devEui: eui,
+      action,
+      value,
+      fPort: 2
+    });
+  }
 }
