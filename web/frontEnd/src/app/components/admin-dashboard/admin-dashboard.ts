@@ -354,13 +354,31 @@ export class AdminDashboard implements OnInit, OnDestroy {
     this.irrigationDevice = d;
     this.irrigationOpen = true;
   }
-  onIrrigationCommand(device: DeviceWithLatest, action: 'OPEN' | 'CLOSE'){
-    (this.deviceSvc as any).sendCommand?.(device.devEui, action)
-      ?.pipe(catchError(()=>of(null)))
-      .subscribe(() => {
-        // optionally show a toast; we keep UI in-place without refresh
-      });
+  onIrrigationCommand(device: DeviceWithLatest, action: 'OPEN' | 'CLOSE') {
+  const devEui = device.devEui;
+  const value = action === 'OPEN' ? 1 : 0;
+
+  (this.deviceSvc as any).sendCommand?.(devEui, action)
+    ?.pipe(catchError(() => of(null)))
+    .subscribe(() => {
+      // ✅ Optimistic local update of L.command so the tile shows ON/OFF immediately
+      const orgId = this.findDeviceOrgId(devEui) || this.selectedOrgId || '';
+      const cur = this.findDeviceByEui(devEui);
+      if (!orgId || !cur) return;
+
+      const latest = {
+        ...(cur.latest || {}),
+        command: value
+      } as DeviceWithLatest['latest'];
+
+      this.upsertDeviceInMaps(orgId, {
+        ...cur,
+        latest,
+        status: latest?.fresh ? 'ONLINE' : 'OFFLINE'
+      } as any);
+    });
   }
+
 
   /** range explorer */
   openChart(device: DeviceWithLatest, metric: MetricKey){ this.chartDevice=device; this.chartMetric=metric; this.chartOpen=true; }

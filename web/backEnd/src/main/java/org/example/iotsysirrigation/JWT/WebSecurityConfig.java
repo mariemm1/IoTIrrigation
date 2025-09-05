@@ -65,7 +65,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/commands/**").hasAnyRole("ADMIN","CLIENT")
-                        .requestMatchers("/api/commands/**").hasAnyRole("ADMIN","CLIENT")
+                        .requestMatchers("/api/commands/**").hasRole("ADMIN")
                         .requestMatchers("/api/readings/**").hasAnyRole("ADMIN","CLIENT")
                         .requestMatchers("/api/devices/**").hasAnyRole("ADMIN","CLIENT")
 

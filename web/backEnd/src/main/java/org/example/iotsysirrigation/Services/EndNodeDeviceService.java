@@ -220,4 +220,13 @@ public class EndNodeDeviceService {
         }
         return null;
     }
+
+
+    /** Enqueue a one-byte downlink (1=open, 0=close) via ChirpStack. */
+    public boolean sendCommand(String devEui, Integer value, Integer fPort) {
+        String eui = norm(devEui);
+        int v = (value != null && value > 0) ? 1 : 0;
+        return chirpstackClient.enqueueDownlink(eui, v, fPort);
+    }
+
 }
