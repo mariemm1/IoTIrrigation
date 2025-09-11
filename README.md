@@ -38,6 +38,39 @@ flowchart LR
 
 ---
 
+## Diagrams
+
+> The diagrams below are created in **draw.io (diagrams.net)**.  
+> Editable sources live in `docs/diagrams/*.drawio`, and the README embeds the exported **SVG** versions.
+
+### Class Diagram
+<p align="center">
+  <img src="docs/diagrams/aquasense-class.svg" alt="AquaSense Class Diagram (User, Role, Organization, EndNodeDevice, SensorReading)" width="1000">
+</p>
+
+<details>
+  <summary><b>Text summary (quick reference)</b></summary>
+
+  **Entities:** User, Role, Organization, EndNodeDevice, SensorReading  
+  **Key relations:** Organization 1—0..* EndNodeDevice (owns) • EndNodeDevice 1 ◼— 0..* SensorReading (produces) • User 0..*—0..* Role (has) • User 1—0..* EndNodeDevice (manage)
+
+</details>
+
+---
+
+### Use-Case Diagram
+<p align="center">
+  <img src="docs/diagrams/aquasense-usecase.svg" alt="AquaSense Use-Case Diagram (Client, Admin, authenticate, dashboard, manage orgs/users/devices, manual irrigation command)" width="1000">
+</p>
+
+<details>
+  <summary><b>Text summary (actors & main cases)</b></summary>
+
+  **Actors:** Client, Admin  
+  **Main use cases:** Authenticate, View Real-Time Dashboard, Manage Devices, Manage Organizations, Manage Users, Send Irrigation Command (Manual). :contentReference[oaicite:0]{index=0}
+</details>
+
+
 
 
 
