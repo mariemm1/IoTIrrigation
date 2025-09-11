@@ -36,9 +36,9 @@ flowchart LR
 
 ```
 
-<!-- 1) ARCHITECTURE OVERVIEW — put this RIGHT AFTER the Mermaid diagram -->
+
 <p align="center">
-  <img src="docs/captures/cloud-architecture.png" width="820"
+  <img src="./images/ec2.png" width="820"
        alt="Cloud/Containers overview (EC2, Portainer, Docker, ChirpStack, Mosquitto, MongoDB, Mongo-Express, Web App)">
 </p>
 
@@ -49,7 +49,7 @@ flowchart LR
 
 ### Class Diagram
 <p align="center">
-  <img src="docs/diagrams/aquasense-class.svg" alt="AquaSense Class Diagram (User, Role, Organization, EndNodeDevice, SensorReading)" width="1000">
+  <img src="./images/class.png" alt="AquaSense Class Diagram (User, Role, Organization, EndNodeDevice, SensorReading)" width="1000">
 </p>
 
 <details>
@@ -62,7 +62,7 @@ flowchart LR
 
 ### Use-Case Diagram
 <p align="center">
-  <img src="docs/diagrams/aquasense-usecase.svg" alt="AquaSense Use-Case Diagram (Client, Admin, authenticate, dashboard, manage orgs/users/devices, manual irrigation command)" width="1000">
+  <img src="./images/useCase.png" alt="AquaSense Use-Case Diagram (Client, Admin, authenticate, dashboard, manage orgs/users/devices, manual irrigation command)" width="1000">
 </p>
 
 <details>
@@ -197,14 +197,13 @@ CHIRPSTACK_API_URL=http://chirpstack:8085/api
 ~~~
 
 ### 3.6 Captures (replace with your screenshots)
-```html
-<!-- 2) CHIRPSTACK — inside Section 3.3 (ChirpStack setup), under 'Verify uplinks in UI' -->
+
 **Verify uplinks in UI (Events tab):**
 <p align="center">
-  <img src="docs/captures/chirpstack-events.png" width="1000"
+  <img src="./images/chirp.png" width="1000"
        alt="ChirpStack Device Events: uplinks on FPort 2">
 </p>
-```
+
 
 ---
 
@@ -273,9 +272,8 @@ CHIRPSTACK_API_URL=http://chirpstack:8085/api
 }
 ~~~
 
-<!-- 3) DATABASE — inside Section 4 (Database & Ingestion), right after the example JSON document) -->
 <p align="center">
-  <img src="docs/captures/mongo-express-sensors.png" width="820"
+  <img src="./images/mongo.png" width="820"
        alt="Mongo-Express sensors collection with decoded object_json">
 </p>
 
