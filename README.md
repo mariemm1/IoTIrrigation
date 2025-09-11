@@ -65,6 +65,27 @@ flowchart LR
 
 </details>
 
+---
+
+## Project Structure
+
+```text
+.
+├─ chirpstack/                 # LoRaWAN network server bundle
+├─ db/                         # Data pipeline & Mongo helpers
+└─ web/
+   ├─ backEnd/                 # Spring Boot API (Java 21, JWT/RBAC)
+   │  ├─ src/main/java/...     # controllers, services, models (EndNodeDevice, SensorReading, User, Role)
+   │  ├─ src/main/resources/   # application.properties / YAML
+   │  └─ pom.xml               # Maven project descriptor
+   └─ frontEnd/                # Angular 20 dashboard (SSR + Vite)
+      ├─ src/app/              # feature modules, components (Dashboard, Devices, Auth)
+      ├─ src/assets/           # images, styles
+      ├─ package.json          # npm scripts & deps
+      └─ angular.json          # Angular workspace config
+
+```
+
 
 
 
