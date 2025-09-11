@@ -12,4 +12,4 @@ flowchart LR
   E --> F[(MongoDB: iot_data.sensors)]
   F <--> G[Spring Boot API<br/>JWT / RBAC]
   G <--> H[Angular 20 Dashboard] 
-```
+
