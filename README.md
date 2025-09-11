@@ -36,6 +36,13 @@ flowchart LR
 
 ```
 
+<!-- 1) ARCHITECTURE OVERVIEW — put this RIGHT AFTER the Mermaid diagram -->
+<p align="center">
+  <img src="docs/captures/cloud-architecture.png" width="820"
+       alt="Cloud/Containers overview (EC2, Portainer, Docker, ChirpStack, Mosquitto, MongoDB, Mongo-Express, Web App)">
+</p>
+
+
 ---
 
 ## Diagrams
@@ -167,7 +174,7 @@ sudo ufw allow 1700/udp
 - **Provisioning path**: `Tenant → Application → Device Profile (Class A) → Device (DevEUI)`  
 - **Join method**: **OTAA** (recommended)  
 - **Integration**: **MQTT** (broker = **Mosquitto** in our stack)  
-- **Web UI**: `http://<host>:8085`  
+- **Web UI**: `http://<host>:8085` 
 
 > **Tip:** keep a note of `application_id` and always paste the **DevEUI in lowercase** when testing topics/filters.
 
@@ -191,13 +198,11 @@ CHIRPSTACK_API_URL=http://chirpstack:8085/api
 
 ### 3.6 Captures (replace with your screenshots)
 ```html
+<!-- 2) CHIRPSTACK — inside Section 3.3 (ChirpStack setup), under 'Verify uplinks in UI' -->
+**Verify uplinks in UI (Events tab):**
 <p align="center">
-  <img src="docs/captures/chirpstack-tenant.png" alt="ChirpStack – Tenant/Application" width="800"><br/>
-  <em>Tenant & Application setup</em>
-</p>
-<p align="center">
-  <img src="docs/captures/chirpstack-device-events.png" alt="ChirpStack – Device Events" width="800"><br/>
-  <em>Device Events – verify join/uplink before moving on</em>
+  <img src="docs/captures/chirpstack-events.png" width="1000"
+       alt="ChirpStack Device Events: uplinks on FPort 2">
 </p>
 ```
 
@@ -267,6 +272,13 @@ CHIRPSTACK_API_URL=http://chirpstack:8085/api
     timestamp: ISODate('2025-09-10T18:21:42.606Z')
 }
 ~~~
+
+<!-- 3) DATABASE — inside Section 4 (Database & Ingestion), right after the example JSON document) -->
+<p align="center">
+  <img src="docs/captures/mongo-express-sensors.png" width="820"
+       alt="Mongo-Express sensors collection with decoded object_json">
+</p>
+
 
 ### 4.3 Troubleshooting
 - **No documents**  
