@@ -2,7 +2,8 @@
 
 This repository contains a full-stack **smart irrigation** system. IoT end-nodes send measurements over **LoRaWAN** to a gateway, flow through **ChirpStack** and **MQTT**, are stored in **MongoDB**, exposed via a secure **Spring Boot** API, and visualized with an **Angular 20** dashboard.  
 Everything runs with **Docker Compose** locally or on **AWS EC2 (Ubuntu)**.
----
+
+
 ```mermaid
 flowchart LR
   subgraph Field
@@ -34,6 +35,10 @@ flowchart LR
   class F db;
 
 ```
+
+---
+
+
 
 
 
