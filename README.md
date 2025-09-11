@@ -201,9 +201,84 @@ CHIRPSTACK_API_URL=http://chirpstack:8085/api
 </p>
 ```
 
+---
+
+## 4) Database & Ingestion (MongoDB + mqtt_to_mongo)
+
+> **Purpose**  
+> Persist decoded uplinks from ChirpStack into **MongoDB** using a lightweight Python bridge (**mqtt_to_mongo**). Inspect and validate data with **Mongo-Express**.
 
 
+### 4.1 Services
+- **MongoDB** — time-series store (DB: `iot_data`, collection: `sensors`)  
+- **Mongo-Express** — web admin at `http://<host>:8083`  
+- **mqtt_to_mongo** — Python service subscribing to ChirpStack MQTT topics and inserting normalized documents
 
+
+### 4.2 Document shape (inserted by `mqtt_to_mongo.py`)
+~~~json
+{
+  _id: ObjectId('68c1c1b6f1720d4e739ef6f0'),
+    application_id: 'c037b967-a03a-4553-9dee-35f103f27621',
+    dev_eui: '008000e100000000',
+    f_port: 2,
+    data: 'AIgFd2UBn2kAAAABcyeSAmcBIgNonARlAQoFAgSwBgAB',
+    rx_info: [
+        {
+            gatewayId: 'a840411d1fdc4150',
+            uplinkId: 44024,
+            gwTime: '2025-09-10T18:21:42.340632+00:00',
+            nsTime: '2025-09-10T18:21:42.397573624+00:00',
+            rssi: -72,
+            snr: 10.2,
+            channel: 3,
+            location: {},
+            context: '9/P6Sw==',
+            crcStatus: 'CRC_OK'
+        }
+    ],
+    object_json: {
+        analogInput: {
+            '5': 12
+        },
+        illuminanceSensor: {
+            '4': 266
+        },
+        humiditySensor: {
+            '3': 78
+        },
+        barometer: {
+            '1': 1013
+        },
+        gpsLocation: {
+            '0': {
+                altitude: 0,
+                longitude: 10.6345,
+                latitude: 35.8245
+            }
+        },
+        temperatureSensor: {
+            '2': 29
+        },
+        digitalInput: {
+            '6': 1
+        }
+    },
+    timestamp: ISODate('2025-09-10T18:21:42.606Z')
+}
+~~~
+
+### 4.3 Troubleshooting
+- **No documents**  
+  • Verify gateway → ChirpStack host IP (UDP/1700 open)  
+  • Check ChirpStack **Device → Events** for joins/uplinks  
+  • Confirm the bridge subscribes to the right topic (`chirpstack/#` or app-specific)  
+  • Tail logs:
+  ~~~bash
+  docker compose logs -f mqtt_to_mongo
+  ~~~
+- **DevEUI mismatches** → ensure **lowercase** in ChirpStack, MQTT topics, and DB  
+- **Wrong fields** → adjust channel→field mapping inside `mqtt_to_mongo.py`
 
 
 
