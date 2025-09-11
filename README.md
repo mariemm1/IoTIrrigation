@@ -3,7 +3,7 @@
 This repository contains a full-stack **smart irrigation** system. IoT end-nodes send measurements over **LoRaWAN** to a gateway, flow through **ChirpStack** and **MQTT**, are stored in **MongoDB**, exposed via a secure **Spring Boot** API, and visualized with an **Angular 20** dashboard.  
 Everything runs with **Docker Compose** locally or on **AWS EC2 (Ubuntu)**.
 
-
+## Architecture Overview
 ```mermaid
 flowchart LR
   subgraph Field
@@ -61,7 +61,7 @@ flowchart LR
 <details>
   <summary><b>Text summary </b></summary>
 
-  Two main actors interact with the system: the **Client/Farmer** and the **Admin**. Both authenticate, access the **real-time dashboard**, browse **devices**, open **device detail** to see the **latest readings**, **history**, and **map location**. Operators can adjust **thresholds** and send a **manual irrigation command** when allowed. **Admins** additionally manage **users/roles** and **device/organization** records. In the background, AquaSense **ingests uplinks from ChirpStack**, persists them, evaluates rules to **raise alerts**, and exposes the data through the API for the web dashboard.
+  Two main actors interact with the system: the **Client** and the **Admin**. Both authenticate, access the **real-time dashboard**, browse **devices**, open **device detail** to see the **latest readings**, **history**, and **map location**. Operators can adjust **thresholds** and send a **manual irrigation command** when allowed. **Admins** additionally manage **users/roles** and **device/organization** records. In the background, AquaSense **ingests uplinks from ChirpStack**, persists them, and exposes the data through the API for the web dashboard.
 
 </details>
 
