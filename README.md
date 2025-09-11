@@ -86,6 +86,54 @@ flowchart LR
 
 ```
 
+## 2) IoT
+
+**Hardware**
+- **End node:** STM32WL55JC1 (LoRa) + **X-NUCLEO-IKS01A3** (temperature / humidity / pressure)
+- **Location:** GPS coordinates stored with each device (lat, lng, alt).
+- **Power/Join:** LoRaWAN **OTAA** (secure join).
+
+**Uplinks**
+- Region/plan: **EU868**
+- **FPort:** `2`
+- **Payload format:** **CayenneLPP**
+- **DevEUI:** normalized to **lowercase hex (no separators)** across MQTT, DB, and API.
+
+**Measured metrics**
+- Atmospheric: **temperature**, **humidity**, **pressure**
+- **Soil humidity** (from irrigation probe)
+- **Irrigation command** state (digital input 0/1)
+- **Illuminance**
+- **GPS** (lat/lon/alt)
+
+**CayenneLPP channel mapping**
+
+| Channel | Sensor/Data Type            | Unit / Note            |
+|:------:|------------------------------|-------------------------|
+| `0`    | GPS (lat, lon, alt)          | degrees / meters       |
+| `1`    | Barometric pressure          | hPa                    |
+| `2`    | Temperature                  | °C                     |
+| `3`    | Relative humidity            | %                      |
+| `4`    | Illuminance                  | lux (optional)         |
+| `5`    | Analog input (soil probe)    | raw / % (normalized)   |
+| `6`    | Digital input (irrigation)   | 0/1                    |
+
+**Decoded payload (example)**
+```json
+{
+  "illuminanceSensor": { "4": 0 },
+  "barometer":        { "1": 1016 },
+  "analogInput":      { "5": 12 },
+  "humiditySensor":   { "3": 58 },
+  "digitalInput":     { "6": 1 },
+  "gpsLocation": {
+    "0": { "altitude": 0, "longitude": 10.6345, "latitude": 35.8245 }
+  },
+  "temperatureSensor": { "2": 30 }
+}
+```
+
+
 
 
 
