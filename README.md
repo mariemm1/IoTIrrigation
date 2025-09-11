@@ -67,7 +67,7 @@ flowchart LR
 
 ---
 
-## Project Structure
+## 1) Project Structure
 
 ```text
 .
@@ -134,20 +134,6 @@ flowchart LR
 ```
 ---
 
-## 3) ChirpStack (Gateway & MQTT)
-
-### 3.1 Gateway (packet forwarder)
-Configure the **Semtech UDP** packet forwarder to send packets to your ChirpStack host.
-
-- **Server/IP:** the **host IP** running ChirpStack (do **not** use `localhost` on the gateway)
-- **Port:** `1700/udp`  
-- **Region:** `EU868` (must match the device and ChirpStack)
-
-Open firewall (Windows example):
-```powershell
-netsh advfirewall firewall add rule name="LoRa UDP" dir=in action=allow protocol=udp localport=1700
-```
-
 ## 3) ChirpStack (Gateway & MQTT) — Concepts, Setup, Verification
 
 > **What this layer does**  
@@ -181,34 +167,11 @@ sudo ufw allow 1700/udp
 - **Provisioning path**: `Tenant → Application → Device Profile (Class A) → Device (DevEUI)`  
 - **Join method**: **OTAA** (recommended)  
 - **Integration**: **MQTT** (broker = **Mosquitto** in our stack)  
-- **Web UI**: `http://<host>:8080`  
+- **Web UI**: `http://<host>:8085`  
 
 > **Tip:** keep a note of `application_id` and always paste the **DevEUI in lowercase** when testing topics/filters.
 
-### 3.4 MQTT topics (v4)
-~~~text
-chirpstack/application/<appId>/device/<devEui>/event/up      # uplinks (decoded JSON in `object`)
-chirpstack/application/<appId>/device/<devEui>/command/down  # downlinks (optional)
-~~~
-
-**Quick debug (whole bus)**
-~~~bash
-mosquitto_sub -h <broker-host> -t "chirpstack/#" -v
-~~~
-**Only uplinks for one app**
-~~~bash
-mosquitto_sub -h <broker-host> -t "chirpstack/application/<appId>/device/+/event/up" -v
-~~~
-
-**(Optional) Downlink example** — toggle actuator (base64 payload on FPort 2)
-~~~bash
-mosquitto_pub -h <broker-host> \
-  -t "chirpstack/application/<appId>/device/<devEui>/command/down" \
-  -m '{"confirmed":false,"fPort":2,"data":"AQ=="}'
-# "AQ==" is base64 for 0x01 (example ON command)
-~~~
-
-### 3.5 Troubleshooting & Verification
+### 3.4 Troubleshooting & Verification
 - **No joins** → check gateway points to the **correct host IP**, UDP/1700 open, device keys (AppEUI/AppKey) correct, gateway has **NTP**
 - **No uplinks** → subscribe to `chirpstack/#` and check **Device → Events** in the UI
 - **DevEUI mismatch** → ensure the same **lowercase** EUI is used in UI, topics, and DB
@@ -218,15 +181,15 @@ mosquitto_pub -h <broker-host> \
   - Uplinks arrive on **FPort 2**
   - `mosquitto_sub` shows messages on expected topics
 
-### 3.6 Security notes
+### 3.5 Security notes
 - Don’t expose **Mosquitto** publicly; keep it on a private Docker network
-- If using ChirpStack REST, rotate tokens and store in `.env`:
+- For using ChirpStack REST, rotate tokens and store in `.env`:
 ~~~dotenv
 CHIRPSTACK_API_TOKEN=REPLACE_ME
-CHIRPSTACK_API_URL=http://chirpstack:8080/api
+CHIRPSTACK_API_URL=http://chirpstack:8085/api
 ~~~
 
-### 3.7 Captures (replace with your screenshots)
+### 3.6 Captures (replace with your screenshots)
 ```html
 <p align="center">
   <img src="docs/captures/chirpstack-tenant.png" alt="ChirpStack – Tenant/Application" width="800"><br/>
