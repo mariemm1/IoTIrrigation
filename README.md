@@ -40,23 +40,18 @@ flowchart LR
 
 ## Diagrams
 
-> The diagrams below are created in **draw.io (diagrams.net)**.  
-> Editable sources live in `docs/diagrams/*.drawio`, and the README embeds the exported **SVG** versions.
-
 ### Class Diagram
 <p align="center">
   <img src="docs/diagrams/aquasense-class.svg" alt="AquaSense Class Diagram (User, Role, Organization, EndNodeDevice, SensorReading)" width="1000">
 </p>
 
 <details>
-  <summary><b>Text summary (quick reference)</b></summary>
+  <summary><b>Text summary </b></summary>
 
-  **Entities:** User, Role, Organization, EndNodeDevice, SensorReading  
-  **Key relations:** Organization 1—0..* EndNodeDevice (owns) • EndNodeDevice 1 ◼— 0..* SensorReading (produces) • User 0..*—0..* Role (has) • User 1—0..* EndNodeDevice (manage)
+  The model centers on **organizations** that *own* many **end-node devices**. Each **EndNodeDevice** (identified by a LoRaWAN **devEUI** and carrying GPS info) **produces** a time-series of **SensorReading** records; this is a composition, so readings exist only for their device. Readings capture the environmental metrics used by the app (temperature, humidity, pressure, soil humidity, luminosity) plus the irrigation command state and timestamp. **Users** sign in to operate the system and are granted permissions through **Roles** (e.g., *ADMIN*, *CLIENT*). Admin users manage organizations and devices; client users primarily view dashboards and device details.
 
 </details>
 
----
 
 ### Use-Case Diagram
 <p align="center">
@@ -64,10 +59,10 @@ flowchart LR
 </p>
 
 <details>
-  <summary><b>Text summary (actors & main cases)</b></summary>
+  <summary><b>Text summary </b></summary>
 
-  **Actors:** Client, Admin  
-  **Main use cases:** Authenticate, View Real-Time Dashboard, Manage Devices, Manage Organizations, Manage Users, Send Irrigation Command (Manual). :contentReference[oaicite:0]{index=0}
+  Two main actors interact with the system: the **Client/Farmer** and the **Admin**. Both authenticate, access the **real-time dashboard**, browse **devices**, open **device detail** to see the **latest readings**, **history**, and **map location**. Operators can adjust **thresholds** and send a **manual irrigation command** when allowed. **Admins** additionally manage **users/roles** and **device/organization** records. In the background, AquaSense **ingests uplinks from ChirpStack**, persists them, evaluates rules to **raise alerts**, and exposes the data through the API for the web dashboard.
+
 </details>
 
 
