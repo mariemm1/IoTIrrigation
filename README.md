@@ -41,44 +41,6 @@ flowchart LR
        alt="Cloud/Containers overview (EC2, Portainer, Docker, ChirpStack, Mosquitto, MongoDB, Mongo-Express, Web App)">
 </p>
 
-
----
-
-## Proposed Solution
-
-### 1) Problem Analysis
-- **Context.** Manual or timer-based irrigation wastes water and ignores real field conditions (soil, weather, light).
-- **Pain points.** Need real-time visibility (temperature, humidity, soil moisture, pressure, luminosity), device geolocation, and the ability to **act** (irrigation command) with traceability.
-- **Field constraints.** Poor connectivity in rural areas, limited power, low latency needs, end-to-end security.
-- **Objective.** Build an end-to-end chain **IoT → LoRaWAN Gateway → ChirpStack → MQTT → MongoDB → Spring Boot API → Angular Dashboard**, multi-tenant and secured with **JWT/RBAC**, to **observe**, **decide**, and **control**.
-
-### 2) Diagrams
-
-### Class Diagram
-<p align="center">
-  <img src="./images/class.png" alt="AquaSense Class Diagram (User, Role, Organization, EndNodeDevice, SensorReading)" width="1000">
-</p>
-
-<details>
-  <summary><b>Text summary </b></summary>
-
-  The model centers on **organizations** that *own* many **end-node devices**. Each **EndNodeDevice** (identified by a LoRaWAN **devEUI** and carrying GPS info) **produces** a time-series of **SensorReading** records; this is a composition, so readings exist only for their device. Readings capture the environmental metrics used by the app (temperature, humidity, pressure, soil humidity, luminosity) plus the irrigation command state and timestamp. **Users** sign in to operate the system and are granted permissions through **Roles** (e.g., *ADMIN*, *CLIENT*). Admin users manage organizations and devices; client users primarily view dashboards and device details.
-
-</details>
-
-
-### Use-Case Diagram
-<p align="center">
-  <img src="./images/useCase.png" alt="AquaSense Use-Case Diagram (Client, Admin, authenticate, dashboard, manage orgs/users/devices, manual irrigation command)" width="1000">
-</p>
-
-<details>
-  <summary><b>Text summary </b></summary>
-
-  Two main actors interact with the system: the **Client** and the **Admin**. Both authenticate, access the **real-time dashboard**, browse **devices**, open **device detail** to see the **latest readings**, **history**, and **map location**. Operators can adjust **thresholds** and send a **manual irrigation command** when allowed. **Admins** additionally manage **users/roles** and **device/organization** records. In the background, AquaSense **ingests uplinks from ChirpStack**, persists them, and exposes the data through the API for the web dashboard.
-
-</details>
-
 ---
 
 ## 1) Project Structure
